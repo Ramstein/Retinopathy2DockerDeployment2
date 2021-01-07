@@ -180,7 +180,8 @@ RUN pip install --no-cache-dir "sagemaker-pytorch-inference>=2"
 RUN curl https://aws-dlc-licenses.s3.amazonaws.com/pytorch-1.6.0/license.txt -o /license.txt
 
 RUN conda install -y -c conda-forge pyyaml==5.3.1
-RUN pip install --no-cache-dir pillow==8.0 "awscli<2"
+RUN pip install --no-cache-dir pillow==8.0 "awscli<2" \
+    && rm -rf /root/.cache
 
 EXPOSE 8080 8081
 ENTRYPOINT ["python", "/usr/local/bin/dockerd-entrypoint.py"]
@@ -191,17 +192,17 @@ CMD ["torchserve", "--start", "--ts-config", "/home/model-server/config.properti
 
 #RUN git clone https://github.com/RamsteinWR/Retinopathy2.git
 RUN cd conv_net/Retinopathy2/ && ls && pip install -r requirements.txt
+    && rm -rf /root/.cache
 
-ENV PATH /opt/conda/envs/Retinopathy2:$PATH
-WORKDIR /Retinopathy2
+#ENV PATH /opt/conda/envs/Retinopathy2:$PATH
 
 # # AssertionError: NVidia Apex package must be installed. See https://github.com/NVIDIA/apex.
 # RUN pip install --quiet -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" git+https://github.com/NVIDIA/apex
 # RUN pip install git+https://github.com/mapillary/inplace_abn.git@v1.0.3
 
 # Here we install the extra python packages to run the inference code
-RUN pip install flask gevent gunicorn && \
-        rm -rf /root/.cache
+RUN pip install flask gevent gunicorn \
+    && rm -rf /root/.cache
 
 ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONDONTWRITEBYTECODE=TRUE

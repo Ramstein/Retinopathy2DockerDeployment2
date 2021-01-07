@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8d23ca38-8474-4c7d-ab8a-0856af7c4941" name="Default Changelist" comment="code changes made by Ramstein">
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/deps/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/notebooks/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/retinopathy/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/retinopathy/experiments/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/retinopathy/models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/retinopathy/models/heads/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/retinopathy/scripts/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/scripts/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/conv_net/Retinopathy2/tests/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conv_net/Retinopathy2" beforeDir="false" afterPath="$PROJECT_DIR$/conv_net/Retinopathy2" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/conv_net/Retinopathy2" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="1mi3tmfIK2xLVGK96Y8kauyIEBO" />
