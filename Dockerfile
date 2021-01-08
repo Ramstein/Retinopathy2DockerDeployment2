@@ -49,6 +49,57 @@
 #
 #RUN ln -s /fastai/fastai fastai
 
+#FROM ubuntu:16.04
+#
+#RUN apt-get update && apt-get install -y --allow-downgrades --no-install-recommends \
+#         build-essential \
+#         cmake \
+#         git \
+#         curl \
+#         vim \
+#         ca-certificates \
+#         python-qt4 \
+#         libjpeg-dev \
+#	       zip \
+#	       unzip \
+#         nginx \
+#         libpng-dev &&\
+#     rm -rf /var/lib/apt/lists/*
+#
+#ENV PYTHON_VERSION=3.6
+#RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
+#     chmod +x ~/miniconda.sh && \
+#     ~/miniconda.sh -b -p /opt/conda && \
+#     rm ~/miniconda.sh && \
+#    /opt/conda/bin/conda install conda-build
+#
+#RUN git clone https://github.com/mattmcclean/fastai.git
+#RUN cd fastai/ && ls && /opt/conda/bin/conda env create -f environment-cpu.yml
+#RUN /opt/conda/bin/conda clean -ya
+#
+#ENV PATH /opt/conda/envs/fastai-cpu/bin:$PATH
+#ENV USER fastai
+#
+#WORKDIR /fastai
+#
+#CMD source activate fastai-cpu
+#CMD source ~/.bashrc
+#
+## Here we install the extra python packages to run the inference code
+#RUN pip install flask gevent gunicorn && \
+#        rm -rf /root/.cache
+#
+#ENV PYTHONUNBUFFERED=TRUE
+#ENV PYTHONDONTWRITEBYTECODE=TRUE
+#ENV PATH="/opt/program:${PATH}"
+#
+## Set up the program in the image
+#COPY conv_net /opt/program
+#WORKDIR /opt/program
+#RUN chmod 755 serve
+#
+#RUN ln -s /fastai/fastai fastai
+
 FROM ubuntu:18.04
 
 LABEL maintainer="Amazon AI"
@@ -128,7 +179,7 @@ RUN pip install --upgrade pip --trusted-host pypi.org --trusted-host files.pytho
  && ln -s /opt/conda/bin/pip /usr/local/bin/pip3 \
  && pip install cython==0.29.15 \
     ipython==7.12.0 \
-    mkl==2020.0 \
+    # mkl==2020.0 \
     numpy==1.19.4 \
     scipy==1.4.1 \
     typing==3.7.4.3 \
@@ -157,14 +208,14 @@ RUN useradd -m model-server \
  && mkdir -p /home/model-server/tmp /opt/ml/model \
  && chown -R model-server /home/model-server /opt/ml/model
 
-COPY torchserve-entrypoint.py /usr/local/bin/dockerd-entrypoint.py
-COPY config.properties /home/model-server
+# COPY torchserve-entrypoint.py /usr/local/bin/dockerd-entrypoint.py
+# COPY config.properties /home/model-server
 
-RUN chmod +x /usr/local/bin/dockerd-entrypoint.py
+# RUN chmod +x /usr/local/bin/dockerd-entrypoint.py
 
 ADD https://raw.githubusercontent.com/aws/deep-learning-containers/master/src/deep_learning_container.py /usr/local/bin/deep_learning_container.py
 
-RUN chmod +x /usr/local/bin/deep_learning_container.py
+# RUN chmod +x /usr/local/bin/deep_learning_container.py
 
 RUN pip install --no-cache-dir "sagemaker-pytorch-inference>=2"
 
@@ -173,8 +224,8 @@ RUN curl https://aws-dlc-licenses.s3.amazonaws.com/pytorch-1.6.0/license.txt -o 
 RUN conda install -y -c conda-forge pyyaml==5.3.1
 
 EXPOSE 8080 8081
-ENTRYPOINT ["python", "/usr/local/bin/dockerd-entrypoint.py"]
-CMD ["torchserve", "--start", "--ts-config", "/home/model-server/config.properties", "--model-store", "/home/model-server/"]
+# ENTRYPOINT ["python", "/usr/local/bin/dockerd-entrypoint.py"]
+# CMD ["torchserve", "--start", "--ts-config", "/home/model-server/config.properties", "--model-store", "/home/model-server/"]
 
 
 
@@ -194,12 +245,12 @@ ENV PATH="/opt/program:${PATH}"
 
 
 # Set up the program in the image
-COPY conv_net /opt/program
+RUN git clone https://github.com/Ramstein/Retinopathy2DockerDeployment.git
+RUN cd Retinopathy2DockerDeployment/
 
-RUN git clone https://github.com/RamsteinWR/Retinopathy2.git
+RUN git clone https://github.com/Ramstein/Retinopathy2.git
 RUN cd Retinopathy2/ && ls && pip install -r requirements.txt && rm -rf /root/.cache
-RUN cd ..
-COPY Retinopathy2  /opt/program/conv_net
+RUN cd ../../
+COPY Retinopathy2DockerDeployment  /opt/program
 WORKDIR /opt/program
 RUN chmod 755 serve
-
