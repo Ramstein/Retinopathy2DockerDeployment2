@@ -200,39 +200,33 @@ RUN pip install --upgrade pip --trusted-host pypi.org --trusted-host files.pytho
  && rm -rf /root/.cache \
  && rm -rf /var/lib/apt/lists/*
 
-
-
-
 # Uninstall and re-install torch and torchvision from the PyTorch website
 RUN pip install --no-cache-dir torch==1.7.1 \
  && pip install --no-deps --no-cache-dir torchvision==0.8.2 \
+ && pip install --no-cache-dir "sagemaker-pytorch-inference>=2" \
  && rm -rf /root/.cache \
  && rm -rf /var/lib/apt/lists/*
-
-
 
 RUN useradd -m model-server \
  && mkdir -p /home/model-server/tmp /opt/ml/model \
  && chown -R model-server /home/model-server /opt/ml/model
 
-# COPY torchserve-entrypoint.py /usr/local/bin/dockerd-entrypoint.py
-# COPY config.properties /home/model-server
+COPY torchserve-entrypoint.py /usr/local/bin/dockerd-entrypoint.py
+COPY config.properties /home/model-server
 
-# RUN chmod +x /usr/local/bin/dockerd-entrypoint.py
+RUN chmod +x /usr/local/bin/dockerd-entrypoint.py
 
 ADD https://raw.githubusercontent.com/aws/deep-learning-containers/master/src/deep_learning_container.py /usr/local/bin/deep_learning_container.py
 
-# RUN chmod +x /usr/local/bin/deep_learning_container.py
-
-RUN pip install --no-cache-dir "sagemaker-pytorch-inference>=2"
+RUN chmod +x /usr/local/bin/deep_learning_container.py
 
 RUN curl https://aws-dlc-licenses.s3.amazonaws.com/pytorch-1.6.0/license.txt -o /license.txt
 
 RUN conda install -y -c conda-forge pyyaml==5.3.1
 
 EXPOSE 8080 8081
-# ENTRYPOINT ["python", "/usr/local/bin/dockerd-entrypoint.py"]
-# CMD ["torchserve", "--start", "--ts-config", "/home/model-server/config.properties", "--model-store", "/home/model-server/"]
+ENTRYPOINT ["python", "/usr/local/bin/dockerd-entrypoint.py"]
+CMD ["torchserve", "--start", "--ts-config", "/home/model-server/config.properties", "--model-store", "/home/model-server/"]
 
 
 
