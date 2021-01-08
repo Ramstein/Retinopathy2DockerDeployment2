@@ -1,166 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8d23ca38-8474-4c7d-ab8a-0856af7c4941" name="Default Changelist" comment="code changes made by Ramstein">
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/deps/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/deps/pytorch_toolbelt-0.1.3.tar.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/detect_noisy_labels.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/finetune_ord.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/inference.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/inference_template.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/kappa_matrix.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/kappa_matrix.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/kernel_bootstrap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/04e1b77ef107.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/0a262e8b2a5a.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/0a2b5e1a0be8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/0b121d798018.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/0ca261d6e31d.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/0d2c1ae24459.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/0e052b0dec40.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/0e9d6c70eaf7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/0fa8a299f431.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/10c9d368f264.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/1ca7ecbd29fc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/25d98da73248.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/2cb697cbcb0b.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/2f346c794823.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/2f906addeb38.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/31d79157e7c4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/4ca4c2b18a48.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/6d41b03ce069.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/6d7f586a4f82.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/aptos-2019-reg-seresnext50-gwap-regression.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/augmentations.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/augmentations_playground.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/ensembling.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/ensembling.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/ensembling2.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/notebooks/show_samples.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/predict.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/requirements_copy.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/augmentations.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/callbacks.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/dataset.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/experiments/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/experiments/baseline_regression/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/experiments/baseline_regression/config.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/experiments/baseline_regression/experiment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/experiments/baseline_regression/model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/factory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/inference.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/losses.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/common.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/dilated_senet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/efficientnet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/efficientnet_backbone.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/heads/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/heads/fpn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/heads/gap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/heads/gwap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/heads/max.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/heads/rank.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/heads/rms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/heads/rnn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/inceptionv4.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/oc.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/ordinal.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/pnasnet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/regression.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/opt.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/preprocessing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/rank_pooling.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/rounder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/advesarial_validation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/clean_checkpoint.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/compute_cv.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/convert_messidor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/creaate_kernel_bootstrap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/evaluate_oof.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/generalization.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/make_folds.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/preprocess_data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/train_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/visualization.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/run_tensorboard.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/run_tensorboard.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/sagemaker_test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/finetune_fpn.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/finetune_inception_v4.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/finetune_inception_v4_pseudo.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/finetune_seresnext101_fpn.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/finetune_seresnext101_rnn.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/finetune_seresnext50_gap_pl1.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/finetune_seresnext50_gap_pl1.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/finetune_seresnext50_gwap.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/finetune_seresnext50_rnn_pseudo.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/gridsearch_models.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/gridsearch_resnext.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/gridsearch_seresnext50.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/pretrain_models.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/test_seresnext50_gap.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_densenet.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_densenet201.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_pnasnet.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_pnasnet_8.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_pnasnet_gap_8.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_resnet152.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_resnet34.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_resnext.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_resnext_uda.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_senet154.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/scripts/train_seresnet152.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/seresnext50d_gwap_1024_medium_aptos2019_fold0_zealous_hamilton.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/test_sagemaker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/19_right.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/35_left.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/44_right.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/4_left.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/68_right.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/92_left.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/aptos2015_test.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/aptos2015_train.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_datasets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_efficientnet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_ensembling.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_inference.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_loss.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_optical_correction.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_preprocessing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_regression_rounding.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_cls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_cls_magnet.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_cls_uda.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_lgmb.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_ord.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_ord_uda.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_ord_universal.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_reg.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_reg_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/train_reg_uda.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build_train_custom_model.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/conv_net/build_train_custom_model.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/call_endpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/conv_net/call_endpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conv_net/Retinopathy2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/conv_net/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/nginx.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conv_net/predictor - Copy.py" beforeDir="false" afterPath="$PROJECT_DIR$/predictor - Copy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conv_net/predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/predictor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conv_net/serve" beforeDir="false" afterPath="$PROJECT_DIR$/serve" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conv_net/wsgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/wsgi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker manage" beforeDir="false" afterPath="$PROJECT_DIR$/conv_net/docker manage" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/predict_img_endpoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/conv_net/predict_img_endpoint.py" afterDir="false" />
-    </list>
+    <list default="true" id="8d23ca38-8474-4c7d-ab8a-0856af7c4941" name="Default Changelist" comment="code changes made by Ramstein" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -190,7 +31,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/conv_net" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -265,7 +106,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610110159451</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="code changes made by Ramstein">
+      <created>1610122974929</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1610122974929</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

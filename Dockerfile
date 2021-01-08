@@ -243,7 +243,6 @@ ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONDONTWRITEBYTECODE=TRUE
 ENV PATH="/opt/program:${PATH}"
 
-
 # Set up the program in the image
 RUN git clone https://github.com/Ramstein/Retinopathy2DockerDeployment.git
 RUN cd Retinopathy2DockerDeployment/
