@@ -16,6 +16,12 @@ from os import path, makedirs
 import boto3
 import flask
 import torch
+from Retinopathy2.retinopathy.augmentations import get_test_transform
+from Retinopathy2.retinopathy.dataset import RetinopathyDataset, get_class_names
+from Retinopathy2.retinopathy.factory import get_model
+from Retinopathy2.retinopathy.inference import ApplySoftmaxToLogits, FlipLRMultiheadTTA, Flip4MultiheadTTA, \
+    MultiscaleFlipLRMultiheadTTA
+from Retinopathy2.retinopathy.train_utils import report_checkpoint
 from botocore.exceptions import ClientError
 from catalyst.utils import load_checkpoint, unpack_checkpoint
 from flask_jwt_extended.exceptions import NoAuthorizationError
@@ -24,13 +30,6 @@ from pytorch_toolbelt.utils.torch_utils import to_numpy
 from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
-from Retinopathy2.retinopathy.augmentations import get_test_transform
-from Retinopathy2.retinopathy.dataset import RetinopathyDataset, get_class_names
-from Retinopathy2.retinopathy.factory import get_model
-from Retinopathy2.retinopathy.inference import ApplySoftmaxToLogits, FlipLRMultiheadTTA, Flip4MultiheadTTA, \
-    MultiscaleFlipLRMultiheadTTA
-from Retinopathy2.retinopathy.train_utils import report_checkpoint
 
 '''Not Changing variables'''
 data_dir = '/opt/ml/input/data'
@@ -52,7 +51,7 @@ def download_from_s3(region='us-east-1', bucket="diabetic-retinopathy-data-from-
         makedirs(local_path, mode=0o755, exist_ok=True)
     s3_client = boto3.client('s3', region_name=region)
     try:
-        s3_client.download_file(bucket, Key=s3_filename, Filename=local_path)
+        s3_client.download_file(bucket, Key=s3_filename, Filename=path.join(local_path, s3_filename))
     except ClientError as e:
         if e.response['Error']['Code'] == "404":
             logger.info(f"The object s3://{bucket}/{s3_filename} in {region} does not exist.")
@@ -149,14 +148,13 @@ def input_fn(request_body, request_content_type='application/json'):
         region = input_object['region']
 
         logger.info('Downloading the input diabetic retinopathy data.')
-        for i in range(100):
+        for i in range(13):  # 3 values for region, access, token
             try:
                 img = input_object[f'img{str(i)}']
                 download_from_s3(region=region, bucket=bucket, s3_filename=img, local_path=data_dir)
                 image_name.append(img)
             except KeyError as e:
                 print(e)
-                break
 
         image_df = DataFrame(image_name, columns=['id_code'])
         image_paths = image_df['id_code'].apply(lambda x: image_with_name_in_dir(data_dir, x))
@@ -257,7 +255,7 @@ class ClassificationService(object):
         return cls.model
 
     @classmethod
-    def InputPredictOutput(cls, request_body, request_content_type='application/json'):
+    def InputPredictOutput(cls, model, request_body, request_content_type='application/json'):
         """For the input, do the predictions and return them.
         Args:
             request_body (json request): containing region, and img0, img1 structure"
@@ -265,7 +263,7 @@ class ClassificationService(object):
 
         return output_fn(prediction=predict_fn(input_object=input_fn(request_body=request_body,
                                                                      request_content_type=request_content_type),
-                                               model=cls.get_model()))
+                                               model=model))
 
 
 # The flask app for serving predictions
@@ -287,14 +285,18 @@ def transformation():
     it to a pandas data frame for internal use and then convert the predictions back to CSV (which really
     just means one prediction per line, since there's a single column.
     """
+    makedirs(data_dir, exist_ok=True)
     print("cleaning test dir")
+
     for root, dirs, files in os.walk(data_dir):
         for f in files:
             os.unlink(os.path.join(root, f))
 
     # write the request body to test file
     if ClassificationService.IsVerifiedUser(flask.request):  # verify the user with access type and token
-        result = ClassificationService.InputPredictOutput(request_body=flask.request.get_json(force=True),
+        model = ClassificationService.get_model()
+        result = ClassificationService.InputPredictOutput(model=model,
+                                                          request_body=flask.request.get_json(force=True),
                                                           request_content_type='application/json')
     else:
         raise NoAuthorizationError('Invalid content-type. Must be application/json.')

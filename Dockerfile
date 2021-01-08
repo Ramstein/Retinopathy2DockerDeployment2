@@ -155,7 +155,9 @@ RUN curl -L -o ~/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-lat
  && /opt/conda/bin/conda update conda \
  && /opt/conda/bin/conda install -y \
     python=$PYTHON_VERSION \
- && /opt/conda/bin/conda clean -ya
+ && /opt/conda/bin/conda clean -ya \
+ && rm -rf /var/lib/apt/lists/*
+
 
 
 RUN wget https://www.open-mpi.org/software/ompi/v4.0/downloads/openmpi-$OPEN_MPI_VERSION.tar.gz \
@@ -192,16 +194,21 @@ RUN pip install --upgrade pip --trusted-host pypi.org --trusted-host files.pytho
     enum-compat==0.0.3 \
     cryptography==2.8 \
     Pillow==6.2.2 \
+    nginx==0.0.1 \
  && conda install -y -c pytorch torchserve=$TS_VERSION \
  && conda install -y -c pytorch torch-model-archiver=$TS_VERSION \
- && rm -rf /root/.cache
+ && rm -rf /root/.cache \
+ && rm -rf /var/lib/apt/lists/*
+
 
 
 
 # Uninstall and re-install torch and torchvision from the PyTorch website
 RUN pip install --no-cache-dir torch==1.7.1 \
  && pip install --no-deps --no-cache-dir torchvision==0.8.2 \
- && rm -rf /root/.cache
+ && rm -rf /root/.cache \
+ && rm -rf /var/lib/apt/lists/*
+
 
 
 RUN useradd -m model-server \
@@ -237,7 +244,9 @@ EXPOSE 8080 8081
 RUN pip install flask==1.1.1 \
         gevent==1.4.0 \
         gunicorn \
-        && rm -rf /root/.cache
+        && rm -rf /root/.cache \
+        && rm -rf /var/lib/apt/lists/*
+
 
 ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONDONTWRITEBYTECODE=TRUE
@@ -245,10 +254,14 @@ ENV PATH="/opt/program:${PATH}"
 
 # Set up the program in the image
 RUN git clone https://github.com/Ramstein/Retinopathy2DockerDeployment.git
-COPY Retinopathy2DockerDeployment  /opt/program
+RUN cd Retinopathy2DockerDeployment/ && cp -a . /opt/program
 
-RUN git clone https://github.com/Ramstein/Retinopathy2.git
-COPY Retinopathy2  /opt/program
-RUN cd Retinopathy2/ && ls && pip install -r requirements.txt && rm -rf /root/.cache
 WORKDIR /opt/program
+RUN git clone https://github.com/Ramstein/Retinopathy2.git
+
+RUN cd Retinopathy2/ && ls && pip install -r requirements.txt \
+    && rm -rf /root/.cache \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN cd ../
 RUN chmod 755 serve

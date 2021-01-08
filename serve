@@ -44,8 +44,20 @@ def start_server():
     print('Starting the inference server with {} workers.'.format(model_server_workers))
 
     # link the log streams to stdout/err so they will be logged to the container logs
-    subprocess.check_call(['ln', '-sf', '/dev/stdout', '/var/log/nginx/access.log'])
-    subprocess.check_call(['ln', '-sf', '/dev/stderr', '/var/log/nginx/error.log'])
+    nginx_dir = '/var/log/nginx'
+    os.makedirs(nginx_dir, exist_ok=True)
+    nginx_access_log_file = os.path.join(nginx_dir, 'access.log')
+    nginx_error_log_file = os.path.join(nginx_dir, 'error.log')
+
+    if not os.path.exists(nginx_access_log_file):
+        with open(nginx_access_log_file, 'w') as fp:
+            pass
+    if not os.path.exists(nginx_error_log_file):
+        with open(nginx_error_log_file, 'w') as fp:
+            pass
+
+    subprocess.check_call(['ln', '-sf', '/dev/stdout', nginx_access_log_file])
+    subprocess.check_call(['ln', '-sf', '/dev/stderr', nginx_error_log_file])
 
     nginx = subprocess.Popen(['nginx', '-c', '/opt/program/nginx.conf'])
     gunicorn = subprocess.Popen(['gunicorn',
