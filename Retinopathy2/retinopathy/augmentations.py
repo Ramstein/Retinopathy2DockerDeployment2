@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from albumentations.augmentations.functional import brightness_contrast_adjust, elastic_transform
 
-from retinopathy.preprocessing import CropBlackRegions, get_preprocessing_transform, ChannelIndependentCLAHE
+from Retinopathy2.retinopathy.preprocessing import CropBlackRegions, get_preprocessing_transform, ChannelIndependentCLAHE
 
 
 class IndependentRandomBrightnessContrast(A.ImageOnlyTransform):

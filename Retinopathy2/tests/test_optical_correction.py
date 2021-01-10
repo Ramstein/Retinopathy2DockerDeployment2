@@ -8,6 +8,7 @@ from pytorch_toolbelt.utils import fs
 from retinopathy.lib.augmentations import CropBlackRegions
 
 
+
 def correct(image, w):
     map_x = np.zeros(image.shape[:2], dtype=np.float32)
     map_y = np.zeros(image.shape[:2], dtype=np.float32)

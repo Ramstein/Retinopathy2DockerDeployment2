@@ -18,9 +18,9 @@ from sklearn.metrics import confusion_matrix, fbeta_score
 from torch import nn
 from torch.nn import Module
 
-from retinopathy.models.ordinal import LogisticCumulativeLink
-from retinopathy.models.regression import regression_to_class
-from retinopathy.rounder import OptimizedRounder
+from Retinopathy2.retinopathy.models.ordinal import LogisticCumulativeLink
+from Retinopathy2.retinopathy.models.regression import regression_to_class
+from Retinopathy2.retinopathy.rounder import OptimizedRounder
 
 
 def cohen_kappa_score(y1, y2, labels=None, weights=None, sample_weight=None):

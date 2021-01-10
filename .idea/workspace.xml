@@ -3,7 +3,25 @@
   <component name="ChangeListManager">
     <list default="true" id="8d23ca38-8474-4c7d-ab8a-0856af7c4941" name="Default Changelist" comment="code changes made by Ramstein">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inference.py" beforeDir="false" afterPath="$PROJECT_DIR$/inference.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/deps/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/notebooks/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/retinopathy/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/retinopathy/augmentations.py" beforeDir="false" afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/augmentations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/retinopathy/callbacks.py" beforeDir="false" afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/callbacks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/retinopathy/experiments/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/retinopathy/experiments/baseline_regression/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/retinopathy/inference.py" beforeDir="false" afterPath="$PROJECT_DIR$/Retinopathy2/retinopathy/inference.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/retinopathy/models/heads/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/retinopathy/scripts/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/scripts/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/tests/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/tests/test_loss.py" beforeDir="false" afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_loss.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Retinopathy2/tests/test_optical_correction.py" beforeDir="false" afterPath="$PROJECT_DIR$/Retinopathy2/tests/test_optical_correction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -265,7 +283,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610312552033</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="code changes made by Ramstein">
+      <created>1610314506952</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1610314506952</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
