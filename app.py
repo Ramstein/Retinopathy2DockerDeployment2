@@ -12,16 +12,19 @@ from os import path, makedirs
 import flask
 from flask import render_template
 from flask import request
-from flask_jwt_extended.exceptions import NoAuthorizationError
 
+from S3Handler import S3Handler
 from inference import model_fn, input_fn, predict_fn, output_fn
 
 '''Not Changing variables'''
-data_dir = '/home/endpoint/data'
-model_dir = '/home/model'
-checkpoint_fname = 'model.pth'
+region = 'us-east-1'
 model_name = 'seresnext50d_gap'
+model_bucket = 'diabetic-retinopathy'
+checkpoint_fname = 'model.pth'
+model_dir = '/home/model'
+
 bucket = "diabetic-retinopathy-data-from-radiology"
+data_dir = '/home/endpoint/data'
 
 need_features = True
 tta = None
@@ -63,16 +66,13 @@ class ClassificationService(object):
         return cls.model
 
     @classmethod
-    def InputPredictOutput(cls, model, request_body, request_content_type='application/json'):
+    def InputPredictOutput(cls, model):
         """For the input, do the predictions and return them.
-        Args:
-            request_body (json request): containing region, and img0, img1 structure"
-            request_content_type: 'application/json"""
-
-        return output_fn(prediction=predict_fn(input_object=input_fn(request_body=request_body,
-                                                                     request_content_type=request_content_type,
-                                                                     data_dir=data_dir),
-                                               model=model, need_features=need_features))
+        Args:"""
+        input_object = input_fn(data_dir=data_dir)
+        prediction = predict_fn(input_object=input_object,
+                                model=model, need_features=need_features)
+        return output_fn(prediction=prediction)
 
 
 # The flask app for serving predictions
@@ -106,13 +106,8 @@ def transformation():
             image_location = os.path.join(data_dir, image_file.filename)
             image_file.save(image_location)
             # write the request body to test file
-            if ClassificationService.IsVerifiedUser(flask.request):  # verify the user with access type and token
-                model = ClassificationService.get_model()
-                result = ClassificationService.InputPredictOutput(model=model,
-                                                                  request_body=flask.request.get_json(force=True),
-                                                                  request_content_type='application/json')
-            else:
-                raise NoAuthorizationError('Invalid content-type. Must be application/json.')
+            model = ClassificationService.get_model()
+            result = ClassificationService.InputPredictOutput(model=model)
 
             return flask.Response(response=result, status=200, mimetype='application/json')
 
@@ -125,9 +120,18 @@ if __name__ == "__main__":
     if not path.exists(data_dir):
         makedirs(data_dir, mode=0o755, exist_ok=True)
 
+    if not path.exists(model_dir):
+        makedirs(model_dir, mode=0o755, exist_ok=True)
+
+    if not path.isfile(path.join(model_dir, checkpoint_fname)):
+        S3Handler = S3Handler()
+        S3Handler.download_from_s3(region=region, bucket=model_bucket,
+                                   s3_filename='deployment/' + checkpoint_fname,
+                                   local_path=path.join(model_dir, checkpoint_fname))
+
     health = ClassificationService.get_model() is not None  # You can insert a health check here
     status = 200 if health else 404
     print("status:", status)
-    app.run(host="0.0.0.0", port='8080', debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)
 
     # return flask.Response(response='\n', status=status, mimetype='application/json')

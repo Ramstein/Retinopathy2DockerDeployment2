@@ -10,7 +10,10 @@ from botocore.exceptions import ClientError
 from tqdm import tqdm
 
 
-class S3Handler:
+class S3Handler():
+    def __init(self):
+        pass
+
     def upload_to_s3(self, channel, file, bucket, region=''):
         s3 = boto3.resource('s3', region_name=region)
         data = open(file, "rb")

@@ -107,39 +107,35 @@ def model_fn(model_dir, model_name=None, checkpoint_fname='', apply_softmax=True
     return model
 
 
-def input_fn(request_body, request_content_type='application/json', data_dir=''):
+def input_fn(data_dir=''):
     image_name = []
+    logger.info('Downloading the input diabetic retinopathy data.')
 
-    if request_content_type == 'application/json':
-        input_object = json.loads(request_body)
-        region = input_object['region']
+    for i in range(13):  # 3 values for region, access, token
+        try:
+            img = input_object[f'img{str(i)}']
+            image_name.append(img)
+        except KeyError as e:
+            print(e)
 
-        logger.info('Downloading the input diabetic retinopathy data.')
-        for i in range(13):  # 3 values for region, access, token
-            try:
-                img = input_object[f'img{str(i)}']
-                image_name.append(img)
-            except KeyError as e:
-                print(e)
+    image_df = DataFrame(image_name, columns=['id_code'])
+    image_paths = image_df['id_code'].apply(lambda x: image_with_name_in_dir(data_dir, x))
 
-        image_df = DataFrame(image_name, columns=['id_code'])
-        image_paths = image_df['id_code'].apply(lambda x: image_with_name_in_dir(data_dir, x))
+    # Preprocessing the images
+    dataset = run_image_preprocessing(
+        params=params,
+        apply_softmax=True,
+        need_features=params['need_features'],
+        image_df=image_df,
+        image_paths=image_paths,
+        batch_size=params['batch_size'],
+        tta='fliplr',
+        workers=num_workers,
+        crop_black=True)
 
-        # Preprocessing the images
-        dataset = run_image_preprocessing(
-            params=params,
-            apply_softmax=True,
-            need_features=params['need_features'],
-            image_df=image_df,
-            image_paths=image_paths,
-            batch_size=params['batch_size'],
-            tta='fliplr',
-            workers=num_workers,
-            crop_black=True)
-
-        return DataLoader(dataset, params['batch_size'],
-                          pin_memory=True,
-                          num_workers=num_workers)
+    return DataLoader(dataset, params['batch_size'],
+                      pin_memory=True,
+                      num_workers=num_workers)
 
     raise Exception(f'Requested unsupported ContentType in request_content_type {request_content_type}')
 
