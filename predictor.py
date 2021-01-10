@@ -6,7 +6,6 @@ implement the scoring for your own algorithm.
 from __future__ import absolute_import
 from __future__ import print_function
 
-import multiprocessing
 import os
 from os import path, makedirs
 
@@ -15,7 +14,7 @@ from flask import render_template
 from flask import request
 from flask_jwt_extended.exceptions import NoAuthorizationError
 
-from inference import model_fn, predict_fn, input_fn, output_fn
+from inference import model_fn, input_fn, predict_fn, output_fn
 
 '''Not Changing variables'''
 data_dir = '/home/endpoint/data'
