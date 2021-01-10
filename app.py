@@ -129,10 +129,10 @@ def transformation():
 
 if __name__ == "__main__":
     if not path.exists(data_dir):
-        makedirs(data_dir, mode=0o755, exist_ok=True)
+        makedirs(data_dir, exist_ok=True)
 
     if not path.exists(model_dir):
-        makedirs(model_dir, mode=0o755, exist_ok=True)
+        makedirs(model_dir, exist_ok=True)
 
     if not path.isfile(path.join(model_dir, checkpoint_fname)):
         ClassificationService.download_from_s3(region=region, bucket=model_bucket,
