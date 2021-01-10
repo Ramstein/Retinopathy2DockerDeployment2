@@ -19,7 +19,7 @@ from inference import model_fn, input_fn, predict_fn
 '''Not Changing variables'''
 region = 'us-east-1'
 model_name = 'seresnext50d_gap'
-model_bucket = 'diabetic-retinopathy'
+model_bucket = 'dataset-retinopathy'
 checkpoint_fname = 'model.pth'
 model_dir = '/home/model'
 
@@ -63,7 +63,7 @@ class ClassificationService(object):
 
     @classmethod
     def download_from_s3(cls, region, bucket, s3_filename, local_path):
-        S3Handler.download_from_s3(region, bucket, s3_filename, local_path)
+        S3Handler.download_from_s3(region=region, bucket=bucket, s3_filename=s3_filename, local_path=local_path)
 
     @classmethod
     def get_model(cls):
