@@ -185,7 +185,7 @@ RUN pip install --upgrade pip --trusted-host pypi.org --trusted-host files.pytho
     numpy==1.19.4 \
     scipy==1.4.1 \
     typing==3.7.4.3 \
-    opencv-python==4.2.0.32\
+    opencv-python==4.2.0.32 \
     scikit-learn==0.21.3 \
     pandas==0.24.2 \
     h5py==2.10.0 \

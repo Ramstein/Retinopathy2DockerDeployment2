@@ -13,17 +13,11 @@ from asyncio.log import logger
 from collections import defaultdict
 from os import path, makedirs
 
-import boto3
 import flask
 import torch
-from Retinopathy2.retinopathy.augmentations import get_test_transform
-from Retinopathy2.retinopathy.dataset import RetinopathyDataset, get_class_names
-from Retinopathy2.retinopathy.factory import get_model
-from Retinopathy2.retinopathy.inference import ApplySoftmaxToLogits, FlipLRMultiheadTTA, Flip4MultiheadTTA, \
-    MultiscaleFlipLRMultiheadTTA
-from Retinopathy2.retinopathy.train_utils import report_checkpoint
-from botocore.exceptions import ClientError
 from catalyst.utils import load_checkpoint, unpack_checkpoint
+from flask import render_template
+from flask import request
 from flask_jwt_extended.exceptions import NoAuthorizationError
 from pandas import DataFrame
 from pytorch_toolbelt.utils.torch_utils import to_numpy
@@ -31,10 +25,16 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from Retinopathy2.retinopathy.augmentations import get_test_transform
+from Retinopathy2.retinopathy.dataset import RetinopathyDataset, get_class_names
+from Retinopathy2.retinopathy.factory import get_model
+from Retinopathy2.retinopathy.inference import ApplySoftmaxToLogits, FlipLRMultiheadTTA, Flip4MultiheadTTA, \
+    MultiscaleFlipLRMultiheadTTA
+from Retinopathy2.retinopathy.train_utils import report_checkpoint
+
 '''Not Changing variables'''
-data_dir = '/opt/ml/input/data'
-bucket = "diabetic-retinopathy-data-from-radiology"
-model_dir = '/opt/ml/model'
+data_dir = '/home/endpoint/data'
+model_dir = '/home/model'
 checkpoint_fname = 'model.pth'
 num_workers = multiprocessing.cpu_count()
 need_features = True
@@ -43,20 +43,6 @@ apply_softmax = True
 
 params = {}
 CLASS_NAMES = []
-
-
-def download_from_s3(region='us-east-1', bucket="diabetic-retinopathy-data-from-radiology", s3_filename='test.png',
-                     local_path="/opt/ml/input/data"):
-    if not path.exists(local_path):
-        makedirs(local_path, mode=0o755, exist_ok=True)
-    s3_client = boto3.client('s3', region_name=region)
-    try:
-        s3_client.download_file(bucket, Key=s3_filename, Filename=path.join(local_path, s3_filename))
-    except ClientError as e:
-        if e.response['Error']['Code'] == "404":
-            logger.info(f"The object s3://{bucket}/{s3_filename} in {region} does not exist.")
-        else:
-            raise
 
 
 def image_with_name_in_dir(dirname, image_id):
@@ -94,7 +80,7 @@ def run_image_preprocessing(
 
 
 def model_fn(model_dir):
-    model_path = path.join(model_dir, checkpoint_fname)  # '/opt/ml/model/model.pth'
+    model_path = path.join(model_dir, checkpoint_fname)  # '/home/model/model.pth'
 
     # already available in this method torch.load(model_path, map_location=lambda storage, loc: storage)
     checkpoint = load_checkpoint(model_path)
@@ -211,16 +197,6 @@ def output_fn(prediction, content_type='application/json'):
         raise Exception(f'Requested unsupported ContentType in Accept:{content_type}')
 
 
-# def write_test_image(stream):
-#     with open(TEST_IMG, "bw") as f:
-#         chunk_size = 4096
-#         while True:
-#             chunk = stream.read(chunk_size)
-#             if len(chunk) == 0:
-#                 return
-#             f.write(chunk)
-
-
 # A singleton for holding the model. This simply loads the model and holds it.
 # It has a InputPredictOutput function that does a prediction based on the model and the input data.
 
@@ -279,26 +255,46 @@ def ping():
     return flask.Response(response='\n', status=status, mimetype='application/json')
 
 
-@app.route('/invocations', methods=['POST'])
+# @app.route('/invocations', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def transformation():
     """Do an inference on a single batch of data. In this sample server, we take data as CSV, convert
     it to a pandas data frame for internal use and then convert the predictions back to CSV (which really
     just means one prediction per line, since there's a single column.
     """
-    makedirs(data_dir, exist_ok=True)
-    print("cleaning test dir")
+    # print("cleaning test dir")
+    # for root, dirs, files in os.walk(data_dir):
+    #     for f in files:
+    #         os.unlink(os.path.join(root, f))
 
-    for root, dirs, files in os.walk(data_dir):
-        for f in files:
-            os.unlink(os.path.join(root, f))
+    if request.method == "POST":
+        image_file = request.files["image"]
+        if image_file:
+            image_location = os.path.join(data_dir, image_file.filename)
+            image_file.save(image_location)
+            # write the request body to test file
+            if ClassificationService.IsVerifiedUser(flask.request):  # verify the user with access type and token
+                model = ClassificationService.get_model()
+                result = ClassificationService.InputPredictOutput(model=model,
+                                                                  request_body=flask.request.get_json(force=True),
+                                                                  request_content_type='application/json')
+            else:
+                raise NoAuthorizationError('Invalid content-type. Must be application/json.')
 
-    # write the request body to test file
-    if ClassificationService.IsVerifiedUser(flask.request):  # verify the user with access type and token
-        model = ClassificationService.get_model()
-        result = ClassificationService.InputPredictOutput(model=model,
-                                                          request_body=flask.request.get_json(force=True),
-                                                          request_content_type='application/json')
-    else:
-        raise NoAuthorizationError('Invalid content-type. Must be application/json.')
+            return flask.Response(response=result, status=200, mimetype='application/json')
 
-    return flask.Response(response=result, status=200, mimetype='application/json')
+            pred = predict(image_location, MODEL)[0]
+            return render_template("index.html", prediction=pred, image_loc=image_file.filename)
+    return render_template("index.html", prediction=0, image_loc=None)
+
+
+if __name__ == "__main__":
+    if not path.exists(data_dir):
+        makedirs(data_dir, mode=0o755, exist_ok=True)
+
+    health = ClassificationService.get_model() is not None  # You can insert a health check here
+    status = 200 if health else 404
+    print("status:", status)
+    app.run(host="0.0.0.0", port='8080', debug=True)
+
+    # return flask.Response(response='\n', status=status, mimetype='application/json')
