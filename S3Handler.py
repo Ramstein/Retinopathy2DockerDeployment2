@@ -52,7 +52,7 @@ def upload_dir_to_s3(bucket, s3_folder, dir_to_upload, region=''):
 def download_from_s3(region='', bucket="", s3_filename='test.png', local_path=""):
     s3_client = boto3.client('s3', region_name=region)
     try:
-        s3_client.download_file(bucket, Key=s3_filename, Filename=path.join(local_path, s3_filename))
+        s3_client.download_file(bucket, Key=s3_filename, Filename=local_path)
     except ClientError as e:
         if e.response['Error']['Code'] == "404":
             logger.info(f"The object s3://{bucket}/{s3_filename} in {region} does not exist.")
