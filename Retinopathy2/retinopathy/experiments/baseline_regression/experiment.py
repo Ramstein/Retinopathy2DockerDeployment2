@@ -2,8 +2,8 @@ from collections import OrderedDict
 
 from catalyst.dl import ConfigExperiment
 
-from retinopathy.augmentations import get_train_transform, get_test_transform
-from retinopathy.dataset import get_datasets
+from Retinopathy2.retinopathy.augmentations import get_train_transform, get_test_transform
+from Retinopathy2.retinopathy.dataset import get_datasets
 
 
 class Experiment(ConfigExperiment):

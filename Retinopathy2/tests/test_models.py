@@ -2,8 +2,8 @@ import pytest
 import torch
 from pytorch_toolbelt.utils.torch_utils import count_parameters
 
-from retinopathy.factory import get_model
-from retinopathy.models.heads.rnn import LSTMBottleneck
+from Retinopathy2.retinopathy.factory import get_model
+from Retinopathy2.retinopathy.models.heads.rnn import LSTMBottleneck
 
 
 @pytest.mark.parametrize('model_name',

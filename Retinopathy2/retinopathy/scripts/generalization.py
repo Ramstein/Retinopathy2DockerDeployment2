@@ -11,9 +11,9 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from retinopathy.dataset import get_datasets, get_class_names
-from retinopathy.factory import get_model
-from retinopathy.inference import run_model_inference_via_dataset, \
+from Retinopathy2.retinopathy.dataset import get_datasets, get_class_names
+from Retinopathy2.retinopathy.factory import get_model
+from Retinopathy2.retinopathy.inference import run_model_inference_via_dataset, \
     reg_predictions_to_submission
 
 

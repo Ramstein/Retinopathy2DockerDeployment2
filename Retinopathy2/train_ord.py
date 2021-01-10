@@ -15,14 +15,14 @@ from pytorch_toolbelt.utils.random import set_manual_seed, get_random_name
 from pytorch_toolbelt.utils.torch_utils import count_parameters, \
     set_trainable
 
-from retinopathy.callbacks import LPRegularizationCallback, \
+from Retinopathy2.retinopathy.callbacks import LPRegularizationCallback, \
     CustomOptimizerCallback
-from retinopathy.dataset import get_class_names, \
+from Retinopathy2.retinopathy.dataset import get_class_names, \
     get_datasets, get_dataloaders
-from retinopathy.factory import get_model, get_optimizer, \
+from Retinopathy2.retinopathy.factory import get_model, get_optimizer, \
     get_optimizable_parameters, get_scheduler, SEResnetEncoder
-from retinopathy.scripts.clean_checkpoint import clean_checkpoint
-from retinopathy.train_utils import report_checkpoint, get_reg_callbacks, get_ord_callbacks, get_cls_callbacks
+from Retinopathy2.retinopathy.scripts.clean_checkpoint import clean_checkpoint
+from Retinopathy2.retinopathy.train_utils import report_checkpoint, get_reg_callbacks, get_ord_callbacks, get_cls_callbacks
 
 
 def main():

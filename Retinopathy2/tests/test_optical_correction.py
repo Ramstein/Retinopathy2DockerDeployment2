@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 from pytorch_toolbelt.utils import fs
-from retinopathy.lib.augmentations import CropBlackRegions
+from Retinopathy2.retinopathy.lib.augmentations import CropBlackRegions
 
 
 

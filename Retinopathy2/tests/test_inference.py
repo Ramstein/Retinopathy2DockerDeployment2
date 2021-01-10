@@ -4,11 +4,11 @@ import torch
 from pytorch_toolbelt.utils import fs
 from pytorch_toolbelt.utils.torch_utils import tensor_from_rgb_image
 
-from retinopathy.augmentations import get_test_transform, AddMicroaneurisms
-from retinopathy.dataset import get_class_names
-from retinopathy.factory import get_model
-from retinopathy.inference import run_model_inference
-from retinopathy.models.common import regression_to_class
+from Retinopathy2.retinopathy.augmentations import get_test_transform, AddMicroaneurisms
+from Retinopathy2.retinopathy.dataset import get_class_names
+from Retinopathy2.retinopathy.factory import get_model
+from Retinopathy2.retinopathy.inference import run_model_inference
+from Retinopathy2.retinopathy.models.common import regression_to_class
 
 
 def test_inference():

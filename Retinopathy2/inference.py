@@ -16,12 +16,12 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from retinopathy.augmentations import get_test_transform
-from retinopathy.dataset import get_class_names, RetinopathyDataset
-from retinopathy.factory import get_model
-from retinopathy.inference import ApplySoftmaxToLogits, FlipLRMultiheadTTA, Flip4MultiheadTTA, \
+from Retinopathy2.retinopathy.augmentations import get_test_transform
+from Retinopathy2.retinopathy.dataset import get_class_names, RetinopathyDataset
+from Retinopathy2.retinopathy.factory import get_model
+from Retinopathy2.retinopathy.inference import ApplySoftmaxToLogits, FlipLRMultiheadTTA, Flip4MultiheadTTA, \
     MultiscaleFlipLRMultiheadTTA
-from retinopathy.train_utils import report_checkpoint
+from Retinopathy2.retinopathy.train_utils import report_checkpoint
 
 '''Not Changing variables'''
 data_dir = '/opt/ml/input/data'

@@ -5,8 +5,8 @@ from pytorch_toolbelt.utils import fs
 from pytorch_toolbelt.utils.torch_utils import to_numpy
 from sklearn.model_selection import train_test_split
 
-from retinopathy.callbacks import cohen_kappa_score
-from retinopathy.models.common import regression_to_class
+from Retinopathy2.retinopathy.callbacks import cohen_kappa_score
+from Retinopathy2.retinopathy.models.common import regression_to_class
 
 
 def main():

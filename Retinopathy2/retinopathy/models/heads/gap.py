@@ -2,7 +2,7 @@ from pytorch_toolbelt.modules.pooling import GlobalAvgPool2d
 from torch import nn
 from torch.nn import functional as F
 
-from retinopathy.models.common import Flatten
+from Retinopathy2.retinopathy.models.common import Flatten
 
 
 class GlobalAvgPoolHead(nn.Module):

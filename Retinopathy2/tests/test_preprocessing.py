@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pytorch_toolbelt.utils import fs
 
-from retinopathy.augmentations import AddMicroaneurisms, CropBlackRegions, AddCottonWools
-from retinopathy.preprocessing import crop_black, clahe_preprocessing, unsharp_mask, red_free
+from Retinopathy2.retinopathy.augmentations import AddMicroaneurisms, CropBlackRegions, AddCottonWools
+from Retinopathy2.retinopathy.preprocessing import crop_black, clahe_preprocessing, unsharp_mask, red_free
 
 
 def test_resizing():

@@ -1,6 +1,6 @@
 from torch import nn
 
-from retinopathy.rank_pooling import GlobalRankPooling
+from Retinopathy2.retinopathy.rank_pooling import GlobalRankPooling
 
 
 class RankPoolingHeadModel(nn.Module):

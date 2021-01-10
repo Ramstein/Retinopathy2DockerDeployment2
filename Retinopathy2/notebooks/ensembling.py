@@ -16,8 +16,8 @@ from sklearn.model_selection import RandomizedSearchCV, GridSearchCV, cross_val_
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 
-from retinopathy.models.common import regression_to_class
-from retinopathy.rounder import OptimizedRounder, OptimizedRounderV2
+from Retinopathy2.retinopathy.models.common import regression_to_class
+from Retinopathy2.retinopathy.rounder import OptimizedRounder, OptimizedRounderV2
 
 MODELS = {
     'heuristic_sinoussi': [

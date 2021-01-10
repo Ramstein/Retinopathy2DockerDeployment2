@@ -5,40 +5,40 @@ import os
 from pytorch_toolbelt.utils.fs import read_rgb_image, id_from_fname
 from pytorch_toolbelt.utils.torch_utils import tensor_from_rgb_image
 
-from retinopathy.augmentations import get_test_transform
-from retinopathy.dataset import RetinopathyDataset, get_class_names, UNLABELED_CLASS
-from retinopathy.factory import get_model, DenseNet121Encoder, DenseNet201Encoder, DenseNet169Encoder, \
+from Retinopathy2.retinopathy.augmentations import get_test_transform
+from Retinopathy2.retinopathy.dataset import RetinopathyDataset, get_class_names, UNLABELED_CLASS
+from Retinopathy2.retinopathy.factory import get_model, DenseNet121Encoder, DenseNet201Encoder, DenseNet169Encoder, \
     PNasnet5LargeEncoder
-from retinopathy.inference import cls_predictions_to_submission, \
+from Retinopathy2.retinopathy.inference import cls_predictions_to_submission, \
     average_predictions, reg_predictions_to_submission, ApplySoftmaxToLogits, \
     FlipLRMultiheadTTA, image_with_name_in_dir, run_models_inference_via_dataset, run_models_inference, \
     Flip4MultiheadTTA, MultiscaleFlipLRMultiheadTTA
-from retinopathy.models.common import EncoderHeadModel, Flatten
-from retinopathy.models.dilated_senet import DilatedSEResNeXt50Encoder, dilated_se_resnext50_32x4d, SENetD, \
+from Retinopathy2.retinopathy.models.common import EncoderHeadModel, Flatten
+from Retinopathy2.retinopathy.models.dilated_senet import DilatedSEResNeXt50Encoder, dilated_se_resnext50_32x4d, SENetD, \
     SEBottleneckD, SEResNetBottleneckD, SEResNeXtBottleneckD, drop_connect, SEModule, \
     initialize_pretrained_model_dilated, BottleneckD, DilatedSEResNeXt101Encoder, dilated_se_resnext101_32x4d
-from retinopathy.models.efficientnet import EfficientNetB7ReLUEncoder, EfficientNetB6ReLUEncoder, \
+from Retinopathy2.retinopathy.models.efficientnet import EfficientNetB7ReLUEncoder, EfficientNetB6ReLUEncoder, \
     EfficientNetB5ReLUEncoder, EfficientNetB4ReLUEncoder, EfficientNetB3ReLUEncoder, EfficientNetB2ReLUEncoder, \
     EfficientNetB1ReLUEncoder, EfficientNetB0ReLUEncoder
-from retinopathy.models.heads.fpn import FPNHeadModel, CoordDoubleConvBNRelu
-from retinopathy.models.heads.gap import GlobalAvgPoolHeadV2, GlobalAvgPoolHead
-from retinopathy.models.heads.gwap import GlobalWeightedAvgPoolHead
-from retinopathy.models.heads.max import GlobalMaxPoolHeadV2, GlobalMaxPoolHead
-from retinopathy.models.heads.rank import RankPoolingHeadModel, RankPoolingHeadModelV2
-from retinopathy.models.heads.rms import RMSPoolHead, RMSPool2d
-from retinopathy.models.heads.rnn import RNNHead, LSTMBottleneck
-from retinopathy.models.inceptionv4 import InceptionV4Encoder, inceptionv4, InceptionV4, Inception_B, Inception_A, \
+from Retinopathy2.retinopathy.models.heads.fpn import FPNHeadModel, CoordDoubleConvBNRelu
+from Retinopathy2.retinopathy.models.heads.gap import GlobalAvgPoolHeadV2, GlobalAvgPoolHead
+from Retinopathy2.retinopathy.models.heads.gwap import GlobalWeightedAvgPoolHead
+from Retinopathy2.retinopathy.models.heads.max import GlobalMaxPoolHeadV2, GlobalMaxPoolHead
+from Retinopathy2.retinopathy.models.heads.rank import RankPoolingHeadModel, RankPoolingHeadModelV2
+from Retinopathy2.retinopathy.models.heads.rms import RMSPoolHead, RMSPool2d
+from Retinopathy2.retinopathy.models.heads.rnn import RNNHead, LSTMBottleneck
+from Retinopathy2.retinopathy.models.inceptionv4 import InceptionV4Encoder, inceptionv4, InceptionV4, Inception_B, Inception_A, \
     Inception_C, Reduction_A, Mixed_5a, Mixed_3a, Mixed_4a, BasicConv2d, Reduction_B
-from retinopathy.models.ordinal import LogisticCumulativeLink, OrdinalEncoderHeadModel
-from retinopathy.models.pnasnet import pnasnet5large
-from retinopathy.models.regression import regression_to_class
-from retinopathy.preprocessing import CropBlackRegions, crop_black, ChannelIndependentCLAHE, \
+from Retinopathy2.retinopathy.models.ordinal import LogisticCumulativeLink, OrdinalEncoderHeadModel
+from Retinopathy2.retinopathy.models.pnasnet import pnasnet5large
+from Retinopathy2.retinopathy.models.regression import regression_to_class
+from Retinopathy2.retinopathy.preprocessing import CropBlackRegions, crop_black, ChannelIndependentCLAHE, \
     clahe_preprocessing, get_preprocessing_transform, UnsharpMask, unsharp_mask, RedFree, red_free, UnsharpMaskV2, \
     unsharp_mask_v2
-from retinopathy.rank_pooling import GlobalRankPooling
-from retinopathy.rounder import OptimizedRounder
-from retinopathy.scripts.preprocess_data import preprocess, convert_dir
-from retinopathy.train_utils import report_checkpoint
+from Retinopathy2.retinopathy.rank_pooling import GlobalRankPooling
+from Retinopathy2.retinopathy.rounder import OptimizedRounder
+from Retinopathy2.retinopathy.scripts.preprocess_data import preprocess, convert_dir
+from Retinopathy2.retinopathy.train_utils import report_checkpoint
 
 
 def encode_archive(archive_name):

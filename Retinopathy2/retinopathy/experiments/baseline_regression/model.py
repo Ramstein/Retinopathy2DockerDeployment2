@@ -1,6 +1,6 @@
 from catalyst.contrib import registry
 
-from retinopathy.factory import get_model
+from Retinopathy2.retinopathy.factory import get_model
 
 
 @registry.Model

@@ -1,6 +1,6 @@
 import torch
 
-from retinopathy.models.common import regression_to_class
+from Retinopathy2.retinopathy.models.common import regression_to_class
 
 
 def test_round():

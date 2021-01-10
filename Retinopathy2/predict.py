@@ -9,7 +9,7 @@ import torch
 from botocore.exceptions import ClientError
 from pytorch_toolbelt.utils import fs
 
-from retinopathy.inference import run_model_inference
+from Retinopathy2.retinopathy.inference import run_model_inference
 
 
 def download_from_s3(s3_filename, local_path="test"):
