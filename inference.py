@@ -5,9 +5,9 @@ import json
 import multiprocessing
 from collections import defaultdict
 from os import path
+from typing import Union, Callable
 
 import torch
-from catalyst.utils import load_checkpoint, unpack_checkpoint
 from pandas import DataFrame
 from pytorch_toolbelt.utils.torch_utils import to_numpy
 from torch import nn
@@ -61,11 +61,85 @@ def run_image_preprocessing(
                                                                            crop_black=crop_black))
 
 
+def check_ddp_wrapped(model):
+    parallel_wrappers = nn.DataParallel, nn.parallel.DistributedDataParallel
+
+    # Check whether Apex is installed and if it is,
+    # add Apex's DistributedDataParallel to list of checked types
+    try:
+        from apex.parallel import DistributedDataParallel as apex_DDP
+
+        parallel_wrappers = parallel_wrappers + (apex_DDP,)
+    except ImportError:
+        pass
+
+    return isinstance(model, parallel_wrappers)
+
+
+def maybe_recursive_call(object_or_dict,
+                         method: Union[str, Callable],
+                         recursive_args=None,
+                         recursive_kwargs=None,
+                         **kwargs, ):
+    if isinstance(object_or_dict, dict):
+        result = type(object_or_dict)()
+        for k, v in object_or_dict.items():
+            r_args = None if recursive_args is None else recursive_args[k]
+            r_kwargs = (
+                None if recursive_kwargs is None else recursive_kwargs[k]
+            )
+            result[k] = maybe_recursive_call(
+                v,
+                method,
+                recursive_args=r_args,
+                recursive_kwargs=r_kwargs,
+                **kwargs,
+            )
+        return result
+
+    r_args = recursive_args or []
+    if not isinstance(r_args, (list, tuple)):
+        r_args = [r_args]
+    r_kwargs = recursive_kwargs or {}
+    if isinstance(method, str):
+        return getattr(object_or_dict, method)(*r_args, **r_kwargs, **kwargs)
+    else:
+        return method(object_or_dict, *r_args, **r_kwargs, **kwargs)
+
+
+def unpack_checkpoint_copy(checkpoint, model=None, criterion=None, optimizer=None, scheduler=None):
+    if model is not None:
+        if check_ddp_wrapped(model):
+            model = model.module
+        maybe_recursive_call(
+            model,
+            "load_state_dict",
+            recursive_args=checkpoint["model_state_dict"],
+        )
+
+    for dict2load, name2load in zip(
+            [criterion, optimizer, scheduler],
+            ["criterion", "optimizer", "scheduler"],
+    ):
+        if dict2load is None:
+            continue
+
+        if isinstance(dict2load, dict):
+            for key, value in dict2load.items():
+                if value is not None:
+                    state_dict2load = f"{name2load}_{key}_state_dict"
+                    value.load_state_dict(checkpoint[state_dict2load])
+        else:
+            name2load = f"{name2load}_state_dict"
+            dict2load.load_state_dict(checkpoint[name2load])
+
+
 def model_fn(model_dir, model_name=None, checkpoint_fname='', apply_softmax=True, tta=None):
     model_path = path.join(model_dir, checkpoint_fname)  # '/home/model/model.pth'
 
     # already available in this method torch.load(model_path, map_location=lambda storage, loc: storage)
-    checkpoint = load_checkpoint(model_path)
+
+    checkpoint = torch.load(model_path, map_location=lambda storage, loc: storage)
     params = checkpoint['checkpoint_data']['cmd_args']
 
     if model_name is None:
@@ -79,7 +153,7 @@ def model_fn(model_dir, model_name=None, checkpoint_fname='', apply_softmax=True
     CLASS_NAMES = get_class_names(coarse_grading=coarse_grading)
     num_classes = len(CLASS_NAMES)
     model = get_model(model_name, pretrained=False, num_classes=num_classes)
-    unpack_checkpoint(checkpoint, model=model)
+    unpack_checkpoint_copy(checkpoint, model=model)
     report_checkpoint(checkpoint)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
