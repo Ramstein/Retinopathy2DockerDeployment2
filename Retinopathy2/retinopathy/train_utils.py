@@ -3,12 +3,12 @@ from functools import partial
 from catalyst.dl import CriterionCallback
 from pytorch_toolbelt.utils.catalyst import ConfusionMatrixCallback, ShowPolarBatchesCallback
 
-from retinopathy.callbacks import CappaScoreCallback, CustomAccuracyCallback, NegativeMiningCallback, \
+from Retinopathy2.retinopathy.callbacks import CappaScoreCallback, CustomAccuracyCallback, NegativeMiningCallback, \
     TSACriterionCallback, UDACriterionCallback, UDARegressionCriterionCallback, ConfusionMatrixCallbackFromRegression, \
     FScoreCallback, RMSEMetric
-from retinopathy.dataset import UNLABELED_CLASS
-from retinopathy.factory import get_loss
-from retinopathy.visualization import draw_regression_predictions, draw_classification_predictions
+from Retinopathy2.retinopathy.dataset import UNLABELED_CLASS
+from Retinopathy2.retinopathy.factory import get_loss
+from Retinopathy2.retinopathy.visualization import draw_regression_predictions, draw_classification_predictions
 
 
 def report_checkpoint(checkpoint):

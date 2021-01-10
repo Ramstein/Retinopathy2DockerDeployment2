@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 from pytorch_toolbelt.utils.torch_utils import rgb_image_from_tensor, to_numpy
 
-from retinopathy.dataset import UNLABELED_CLASS
-from retinopathy.models.regression import regression_to_class
+from Retinopathy2.retinopathy.dataset import UNLABELED_CLASS
+from Retinopathy2.retinopathy.models.regression import regression_to_class
 
 
 def draw_classification_predictions(input: dict,

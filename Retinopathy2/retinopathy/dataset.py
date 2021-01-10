@@ -13,7 +13,7 @@ from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.utils import compute_sample_weight
 from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
 
-from retinopathy.augmentations import get_train_transform, get_test_transform
+from Retinopathy2.retinopathy.augmentations import get_train_transform, get_test_transform
 
 
 def get_class_names(coarse_grading=False):

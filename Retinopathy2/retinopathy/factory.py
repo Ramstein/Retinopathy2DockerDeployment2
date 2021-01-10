@@ -11,24 +11,24 @@ from torch.optim.lr_scheduler import MultiStepLR
 from torch.optim.rmsprop import RMSprop
 from torchvision.models import densenet169, densenet121, densenet201
 
-from retinopathy.losses import ClippedMSELoss, ClippedWingLoss, CumulativeLinkLoss, LabelSmoothingLoss, \
+from Retinopathy2.retinopathy.losses import ClippedMSELoss, ClippedWingLoss, CumulativeLinkLoss, LabelSmoothingLoss, \
     SoftCrossEntropyLoss, ClippedHuber, CustomMSE, HybridCappaLoss, FocalLoss, WingLoss, RMSE, Huber, RegKappa, \
     CauchyLoss
-from retinopathy.models.common import EncoderHeadModel
-from retinopathy.models.dilated_senet import DilatedSEResNeXt50Encoder, DilatedSEResNeXt101Encoder
-from retinopathy.models.efficientnet import EfficientNetB0ReLUEncoder, EfficientNetB7ReLUEncoder, \
+from Retinopathy2.retinopathy.models.common import EncoderHeadModel
+from Retinopathy2.retinopathy.models.dilated_senet import DilatedSEResNeXt50Encoder, DilatedSEResNeXt101Encoder
+from Retinopathy2.retinopathy.models.efficientnet import EfficientNetB0ReLUEncoder, EfficientNetB7ReLUEncoder, \
     EfficientNetB6ReLUEncoder, EfficientNetB5ReLUEncoder, EfficientNetB4ReLUEncoder, EfficientNetB3ReLUEncoder, \
     EfficientNetB2ReLUEncoder, EfficientNetB1ReLUEncoder
-from retinopathy.models.heads.fpn import FPNHeadModel
-from retinopathy.models.heads.gap import GlobalAvgPoolHeadV2, GlobalAvgPoolHead
-from retinopathy.models.heads.gwap import GlobalWeightedAvgPoolHead
-from retinopathy.models.heads.max import GlobalMaxPoolHead, GlobalMaxPoolHeadV2
-from retinopathy.models.heads.rank import RankPoolingHeadModelV2, RankPoolingHeadModel
-from retinopathy.models.heads.rms import RMSPoolHead
-from retinopathy.models.heads.rnn import RNNHead
-from retinopathy.models.inceptionv4 import InceptionV4Encoder
-from retinopathy.models.pnasnet import pnasnet5large
-from retinopathy.opt import Lamb, AdamW, QHAdamW, RAdam, Ranger
+from Retinopathy2.retinopathy.models.heads.fpn import FPNHeadModel
+from Retinopathy2.retinopathy.models.heads.gap import GlobalAvgPoolHeadV2, GlobalAvgPoolHead
+from Retinopathy2.retinopathy.models.heads.gwap import GlobalWeightedAvgPoolHead
+from Retinopathy2.retinopathy.models.heads.max import GlobalMaxPoolHead, GlobalMaxPoolHeadV2
+from Retinopathy2.retinopathy.models.heads.rank import RankPoolingHeadModelV2, RankPoolingHeadModel
+from Retinopathy2.retinopathy.models.heads.rms import RMSPoolHead
+from Retinopathy2.retinopathy.models.heads.rnn import RNNHead
+from Retinopathy2.retinopathy.models.inceptionv4 import InceptionV4Encoder
+from Retinopathy2.retinopathy.models.pnasnet import pnasnet5large
+from Retinopathy2.retinopathy.opt import Lamb, AdamW, QHAdamW, RAdam, Ranger
 
 
 class DenseNet121Encoder(EncoderModule):
