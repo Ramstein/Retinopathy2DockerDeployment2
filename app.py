@@ -13,7 +13,7 @@ import flask
 from flask import render_template
 from flask import request
 
-from S3Handler import S3Handler
+from S3Handler import upload_to_s3, download_from_s3
 from inference import model_fn, input_fn, predict_fn
 
 '''Not Changing variables'''
@@ -56,14 +56,6 @@ class ClassificationService(object):
             #     raise NoAuthorizationError(f'Missing img0 key in json data.')
         else:
             return False
-
-    @classmethod
-    def upload_to_s3(cls, channel, file, bucket, region=''):
-        S3Handler.upload_to_s3(channel, file, bucket, region)
-
-    @classmethod
-    def download_from_s3(cls, region, bucket, s3_filename, local_path):
-        S3Handler.download_from_s3(region=region, bucket=bucket, s3_filename=s3_filename, local_path=local_path)
 
     @classmethod
     def get_model(cls):
@@ -121,8 +113,8 @@ def transformation():
             #           'features': 'ghaf',
             #           }
             render_template("index.html", prediction=result['regrssion'], image_loc=image_file.filename)
-            ClassificationService.upload_to_s3(channel="pretrained", file='se_resnext50_32x4d-a260b3a4.pth',
-                                               bucket=bucket, region=region)
+            upload_to_s3(channel="pretrained", file='se_resnext50_32x4d-a260b3a4.pth',
+                         bucket=bucket, region=region)
 
     return render_template("index.html", prediction=0, image_loc=None)
 
@@ -135,9 +127,9 @@ if __name__ == "__main__":
         makedirs(model_dir, exist_ok=True)
 
     if not path.isfile(path.join(model_dir, checkpoint_fname)):
-        ClassificationService.download_from_s3(region=region, bucket=model_bucket,
-                                               s3_filename='deployment/' + checkpoint_fname,
-                                               local_path=path.join(model_dir, checkpoint_fname))
+        download_from_s3(region=region, bucket=model_bucket,
+                         s3_filename='deployment/' + checkpoint_fname,
+                         local_path=path.join(model_dir, checkpoint_fname))
 
     health = ClassificationService.get_model() is not None  # You can insert a health check here
     status = 200 if health else 404
