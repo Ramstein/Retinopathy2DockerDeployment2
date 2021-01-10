@@ -3,7 +3,6 @@ from __future__ import print_function
 
 import json
 import multiprocessing
-from asyncio.log import logger
 from collections import defaultdict
 from os import path
 
@@ -22,7 +21,6 @@ from Retinopathy2.retinopathy.inference import ApplySoftmaxToLogits, FlipLRMulti
     MultiscaleFlipLRMultiheadTTA
 from Retinopathy2.retinopathy.train_utils import report_checkpoint
 
-
 num_workers = multiprocessing.cpu_count()
 params = {}
 CLASS_NAMES = []
@@ -30,10 +28,11 @@ CLASS_NAMES = []
 
 def image_with_name_in_dir(dirname, image_id):
     for ext in ['png', 'jpg', 'jpeg', 'tif']:
-        image_path = path.join(dirname, f'{image_id}.{ext}')
-        if path.isfile(image_path):
-            return image_path
-    raise FileNotFoundError(image_path)
+        if ext == str(image_id).split('.')[-1]:
+            break
+    if path.isfile(image_id):
+        return image_id
+    raise FileNotFoundError(image_id)
 
 
 def run_image_preprocessing(
@@ -107,18 +106,17 @@ def model_fn(model_dir, model_name=None, checkpoint_fname='', apply_softmax=True
     return model
 
 
-def input_fn(data_dir=''):
-    image_name = []
-    logger.info('Downloading the input diabetic retinopathy data.')
+def input_fn(image_location='', data_dir=''):
+    image_locations = []
+    image_locations.append(image_location)
+    # for i in range(13):  # 3 values for region, access, token
+    #     try:
+    #         img = input_object[f'img{str(i)}']
+    #         image_name.append(img)
+    #     except KeyError as e:
+    #         print(e)
 
-    for i in range(13):  # 3 values for region, access, token
-        try:
-            img = input_object[f'img{str(i)}']
-            image_name.append(img)
-        except KeyError as e:
-            print(e)
-
-    image_df = DataFrame(image_name, columns=['id_code'])
+    image_df = DataFrame(image_locations, columns=['id_code'])
     image_paths = image_df['id_code'].apply(lambda x: image_with_name_in_dir(data_dir, x))
 
     # Preprocessing the images
@@ -128,7 +126,7 @@ def input_fn(data_dir=''):
         need_features=params['need_features'],
         image_df=image_df,
         image_paths=image_paths,
-        batch_size=params['batch_size'],
+        batch_size=len(image_paths['id_code']),
         tta='fliplr',
         workers=num_workers,
         crop_black=True)
@@ -136,8 +134,6 @@ def input_fn(data_dir=''):
     return DataLoader(dataset, params['batch_size'],
                       pin_memory=True,
                       num_workers=num_workers)
-
-    raise Exception(f'Requested unsupported ContentType in request_content_type {request_content_type}')
 
 
 def predict_fn(input_object, model, need_features):

@@ -14,7 +14,7 @@ from flask import render_template
 from flask import request
 
 from S3Handler import S3Handler
-from inference import model_fn, input_fn, predict_fn, output_fn
+from inference import model_fn, input_fn, predict_fn
 
 '''Not Changing variables'''
 region = 'us-east-1'
@@ -58,6 +58,14 @@ class ClassificationService(object):
             return False
 
     @classmethod
+    def upload_to_s3(cls, channel, file, bucket, region=''):
+        S3Handler.upload_to_s3(channel, file, bucket, region)
+
+    @classmethod
+    def download_from_s3(cls, region, bucket, s3_filename, local_path):
+        S3Handler.download_from_s3(region, bucket, s3_filename, local_path)
+
+    @classmethod
     def get_model(cls):
         """Get the model object for this instance, loading it if it's not already loaded."""
         if cls.model is None:
@@ -66,13 +74,12 @@ class ClassificationService(object):
         return cls.model
 
     @classmethod
-    def InputPredictOutput(cls, model):
+    def InputPredictOutput(cls, image_location, model):
         """For the input, do the predictions and return them.
         Args:"""
-        input_object = input_fn(data_dir=data_dir)
-        prediction = predict_fn(input_object=input_object,
-                                model=model, need_features=need_features)
-        return output_fn(prediction=prediction)
+        input_object = input_fn(image_location, data_dir=data_dir)
+        return predict_fn(input_object=input_object, model=model, need_features=need_features)
+        # return output_fn(prediction=prediction)
 
 
 # The flask app for serving predictions
@@ -88,7 +95,6 @@ def ping():
     return flask.Response(response='\n', status=status, mimetype='application/json')
 
 
-# @app.route('/invocations', methods=['POST'])
 @app.route('/', methods=['GET', 'POST'])
 def transformation():
     """Do an inference on a single batch of data. In this sample server, we take data as CSV, convert
@@ -107,12 +113,17 @@ def transformation():
             image_file.save(image_location)
             # write the request body to test file
             model = ClassificationService.get_model()
-            result = ClassificationService.InputPredictOutput(model=model)
+            result = ClassificationService.InputPredictOutput(image_location, model=model)  # result is a dict
+            # result = {'image_id': "/home/endpoint/data/test.png",
+            #           'logits': 65651,
+            #           'regression': 4545,
+            #           'ordinal': 98,
+            #           'features': 'ghaf',
+            #           }
+            render_template("index.html", prediction=result['regrssion'], image_loc=image_file.filename)
+            ClassificationService.upload_to_s3(channel="pretrained", file='se_resnext50_32x4d-a260b3a4.pth',
+                                               bucket=bucket, region=region)
 
-            return flask.Response(response=result, status=200, mimetype='application/json')
-
-            pred = predict(image_location, MODEL)[0]
-            return render_template("index.html", prediction=pred, image_loc=image_file.filename)
     return render_template("index.html", prediction=0, image_loc=None)
 
 
@@ -124,10 +135,9 @@ if __name__ == "__main__":
         makedirs(model_dir, mode=0o755, exist_ok=True)
 
     if not path.isfile(path.join(model_dir, checkpoint_fname)):
-        S3Handler = S3Handler()
-        S3Handler.download_from_s3(region=region, bucket=model_bucket,
-                                   s3_filename='deployment/' + checkpoint_fname,
-                                   local_path=path.join(model_dir, checkpoint_fname))
+        ClassificationService.download_from_s3(region=region, bucket=model_bucket,
+                                               s3_filename='deployment/' + checkpoint_fname,
+                                               local_path=path.join(model_dir, checkpoint_fname))
 
     health = ClassificationService.get_model() is not None  # You can insert a health check here
     status = 200 if health else 404
