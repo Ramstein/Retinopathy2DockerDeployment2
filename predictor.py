@@ -6,195 +6,27 @@ implement the scoring for your own algorithm.
 from __future__ import absolute_import
 from __future__ import print_function
 
-import json
 import multiprocessing
 import os
-from asyncio.log import logger
-from collections import defaultdict
 from os import path, makedirs
 
 import flask
-import torch
-from catalyst.utils import load_checkpoint, unpack_checkpoint
 from flask import render_template
 from flask import request
 from flask_jwt_extended.exceptions import NoAuthorizationError
-from pandas import DataFrame
-from pytorch_toolbelt.utils.torch_utils import to_numpy
-from torch import nn
-from torch.utils.data import DataLoader
-from tqdm import tqdm
 
-from Retinopathy2.retinopathy.augmentations import get_test_transform
-from Retinopathy2.retinopathy.dataset import RetinopathyDataset, get_class_names
-from Retinopathy2.retinopathy.factory import get_model
-from Retinopathy2.retinopathy.inference import ApplySoftmaxToLogits, FlipLRMultiheadTTA, Flip4MultiheadTTA, \
-    MultiscaleFlipLRMultiheadTTA
-from Retinopathy2.retinopathy.train_utils import report_checkpoint
+from inference import model_fn, predict_fn, input_fn, output_fn
 
 '''Not Changing variables'''
 data_dir = '/home/endpoint/data'
 model_dir = '/home/model'
 checkpoint_fname = 'model.pth'
-num_workers = multiprocessing.cpu_count()
+model_name = 'seresnext50d_gap'
+bucket = "diabetic-retinopathy-data-from-radiology"
+
 need_features = True
 tta = None
 apply_softmax = True
-
-params = {}
-CLASS_NAMES = []
-
-
-def image_with_name_in_dir(dirname, image_id):
-    for ext in ['png', 'jpg', 'jpeg', 'tif']:
-        image_path = path.join(dirname, f'{image_id}.{ext}')
-        if path.isfile(image_path):
-            return image_path
-    raise FileNotFoundError(image_path)
-
-
-def run_image_preprocessing(
-        params,
-        image_df: DataFrame,
-        image_paths=None,
-        preprocessing=None,
-        image_size=None,
-        crop_black=True,
-        **kwargs) -> RetinopathyDataset:
-    if image_paths is not None:
-        if preprocessing is None:
-            preprocessing = params.get('preprocessing', None)
-
-        if image_size is None:
-            image_size = params.get('image_size', 1024)
-            image_size = (image_size, image_size)
-
-        if 'diagnosis' in image_df:
-            targets = image_df['diagnosis'].values
-        else:
-            targets = None
-
-        return RetinopathyDataset(image_paths, targets, get_test_transform(image_size,
-                                                                           preprocessing=preprocessing,
-                                                                           crop_black=crop_black))
-
-
-def model_fn(model_dir):
-    model_path = path.join(model_dir, checkpoint_fname)  # '/home/model/model.pth'
-
-    # already available in this method torch.load(model_path, map_location=lambda storage, loc: storage)
-    checkpoint = load_checkpoint(model_path)
-    params = checkpoint['checkpoint_data']['cmd_args']
-
-    model_name = 'seresnext50d_gap'
-
-    if model_name is None:
-        model_name = params['model']
-
-    coarse_grading = params.get('coarse', False)
-
-    # torch.backends.cudnn.deterministic = True
-    # torch.backends.cudnn.benchmark = False
-
-    CLASS_NAMES = get_class_names(coarse_grading=coarse_grading)
-    num_classes = len(CLASS_NAMES)
-    model = get_model(model_name, pretrained=False, num_classes=num_classes)
-    unpack_checkpoint(checkpoint, model=model)
-    report_checkpoint(checkpoint)
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model.to(device)
-    model = model.eval()
-
-    if apply_softmax:
-        model = nn.Sequential(model, ApplySoftmaxToLogits())
-
-    if tta == 'flip' or tta == 'fliplr':
-        model = FlipLRMultiheadTTA(model)
-
-    if tta == 'flip4':
-        model = Flip4MultiheadTTA(model)
-
-    if tta == 'fliplr_ms':
-        model = MultiscaleFlipLRMultiheadTTA(model)
-
-    with torch.no_grad():
-        if torch.cuda.is_available():
-            model = model.cuda()
-            if torch.cuda.device_count() > 1:
-                model = nn.DataParallel(model, device_ids=[id for id in range(torch.cuda.device_count())])
-
-    return model
-
-
-def input_fn(request_body, request_content_type='application/json'):
-    image_name = []
-
-    if request_content_type == 'application/json':
-        input_object = json.loads(request_body)
-        region = input_object['region']
-
-        logger.info('Downloading the input diabetic retinopathy data.')
-        for i in range(13):  # 3 values for region, access, token
-            try:
-                img = input_object[f'img{str(i)}']
-                download_from_s3(region=region, bucket=bucket, s3_filename=img, local_path=data_dir)
-                image_name.append(img)
-            except KeyError as e:
-                print(e)
-
-        image_df = DataFrame(image_name, columns=['id_code'])
-        image_paths = image_df['id_code'].apply(lambda x: image_with_name_in_dir(data_dir, x))
-
-        # Preprocessing the images
-        dataset = run_image_preprocessing(
-            params=params,
-            apply_softmax=True,
-            need_features=params['need_features'],
-            image_df=image_df,
-            image_paths=image_paths,
-            batch_size=params['batch_size'],
-            tta='fliplr',
-            workers=num_workers,
-            crop_black=True)
-
-        return DataLoader(dataset, params['batch_size'],
-                          pin_memory=True,
-                          num_workers=num_workers)
-
-    raise Exception(f'Requested unsupported ContentType in request_content_type {request_content_type}')
-
-
-def predict_fn(input_object, model):
-    predictions = defaultdict(list)
-
-    for batch in tqdm(input_object):
-        input = batch['image']
-        if torch.cuda.is_available():
-            input = input.cuda(non_blocking=True)
-        outputs = model(input)
-
-        predictions['image_id'].extend(batch['image_id'])
-        if 'targets' in batch:
-            predictions['diagnosis'].extend(to_numpy(batch['targets']).tolist())
-
-        predictions['logits'].extend(to_numpy(outputs['logits']).tolist())
-        predictions['regression'].extend(to_numpy(outputs['regression']).tolist())
-        predictions['ordinal'].extend(to_numpy(outputs['ordinal']).tolist())
-        if need_features:
-            predictions['features'].extend(to_numpy(outputs['features']).tolist())
-
-    del input_object
-    return predictions
-
-
-def output_fn(prediction, content_type='application/json'):
-    """
-    # Convert result to JSON
-    """
-    if content_type == 'application/json':
-        return json.dumps(prediction), content_type
-    else:
-        raise Exception(f'Requested unsupported ContentType in Accept:{content_type}')
 
 
 # A singleton for holding the model. This simply loads the model and holds it.
@@ -227,7 +59,8 @@ class ClassificationService(object):
     def get_model(cls):
         """Get the model object for this instance, loading it if it's not already loaded."""
         if cls.model is None:
-            cls.model = model_fn(model_dir=model_dir)
+            cls.model = model_fn(model_dir=model_dir, model_name=model_name, checkpoint_fname=checkpoint_fname,
+                                 apply_softmax=apply_softmax, tta=tta)
         return cls.model
 
     @classmethod
@@ -238,8 +71,9 @@ class ClassificationService(object):
             request_content_type: 'application/json"""
 
         return output_fn(prediction=predict_fn(input_object=input_fn(request_body=request_body,
-                                                                     request_content_type=request_content_type),
-                                               model=model))
+                                                                     request_content_type=request_content_type,
+                                                                     data_dir=data_dir),
+                                               model=model, need_features=need_features))
 
 
 # The flask app for serving predictions
