@@ -131,12 +131,12 @@ def input_fn(image_location='', data_dir='', need_features=True):
         need_features=need_features,
         image_df=image_df,
         image_paths=image_paths,
-        batch_size=len(image_paths['id_code']),
+        batch_size=len(image_df['id_code']),
         tta='fliplr',
         workers=num_workers,
         crop_black=True)
 
-    return DataLoader(dataset, len(image_paths['id_code']),
+    return DataLoader(dataset, len(image_df['id_code']),
                       pin_memory=True,
                       num_workers=num_workers)
 
