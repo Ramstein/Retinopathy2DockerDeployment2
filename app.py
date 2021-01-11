@@ -10,6 +10,7 @@ import os
 from os import path, makedirs
 
 import flask
+import requests
 import werkzeug
 from flask import render_template
 from flask import request
@@ -117,13 +118,17 @@ def transformation():
     #     for f in files:
     #         os.unlink(os.path.join(root, f))
 
+    print(f'Found a {request.method} request for prediction.')
+
     if request.method == "POST":
         image_file = request.files["image"]
         if image_file:
             image_location = os.path.join(data_dir, image_file.filename)
+            print('Saving image file')
             image_file.save(image_location)
             # write the request body to test file
             model = ClassificationService.get_model()
+            print("Making predictions on image file.")
             result = ClassificationService.InputPredictOutput(image_location, model=model)
             # result = {'image_id': "/home/endpoint/data/test.png",  #   # result is a dict
             #           'logits': 65651,
@@ -131,6 +136,7 @@ def transformation():
             #           'ordinal': 98,
             #           'features': 'ghaf',
             #           }
+            print("rendering index.html with predictions and image file, predictions=", result)
             render_template("index.html", image_loc=image_file.filename,
                             image_id=str(result['image_id']).split('/')[-1],
                             scale=0,
@@ -141,7 +147,6 @@ def transformation():
                             features=result['features'])
             upload_to_s3(channel="image", file=image_location,
                          bucket=data_bucket, region=region)
-
     return render_template("index.html", image_loc=None,
                            image_id="static/img/10011_right_820x615.png".split('/')[-1],
                            scale=0,
@@ -153,6 +158,7 @@ def transformation():
 
 
 if __name__ == "__main__":
+    print("Initialising app, checking directories and model files.")
     if not path.exists(data_dir):
         makedirs(data_dir, exist_ok=True)
 
@@ -163,9 +169,10 @@ if __name__ == "__main__":
         download_from_s3(region=region, bucket=model_bucket,
                          s3_filename='deployment/' + checkpoint_fname,
                          local_path=path.join(model_dir, checkpoint_fname))
-
+    print("loading the model", path.join(model_dir, checkpoint_fname))
     health = ClassificationService.get_model() is not None  # You can insert a health check here
     status = 200 if health else 404
     print("status:", status)
+    print(f'Initialising app on {requests.get("http://ip.42.pl/raw").text}:{8888}')
     app.run(host="0.0.0.0", port=8888, debug=True)  # for running on instances
     # app.run(debug=True)
