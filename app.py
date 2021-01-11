@@ -107,7 +107,7 @@ def home():
                            features="None")
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/', methods=['POST'])
 def transformation():
     """Do an inference on a single batch of data. In this sample server, we take data as CSV, convert
     it to a pandas data frame for internal use and then convert the predictions back to CSV (which really
