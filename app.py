@@ -71,7 +71,7 @@ class ClassificationService(object):
     def InputPredictOutput(cls, image_location, model):
         """For the input, do the predictions and return them.
         Args:"""
-        input_object = input_fn(image_location, data_dir=data_dir)
+        input_object = input_fn(image_location, data_dir=data_dir, need_features=need_features)
         return predict_fn(input_object=input_object, model=model, need_features=need_features)
         # return output_fn(prediction=prediction)
 

@@ -70,7 +70,9 @@ def model_fn(model_dir, model_name=None, checkpoint_fname='', apply_softmax=True
     params = checkpoint['checkpoint_data']['cmd_args']
 
     if model_name is None:
-        model_name = params['model']
+        print("Quitting, specify the model_name.")
+        # model_name = params['model']
+        return
 
     coarse_grading = params.get('coarse', False)
 
@@ -107,7 +109,7 @@ def model_fn(model_dir, model_name=None, checkpoint_fname='', apply_softmax=True
     return model
 
 
-def input_fn(image_location='', data_dir=''):
+def input_fn(image_location='', data_dir='', need_features=True):
     image_locations = []
     image_locations.append(image_location)
     # for i in range(13):  # 3 values for region, access, token
@@ -124,7 +126,7 @@ def input_fn(image_location='', data_dir=''):
     dataset = run_image_preprocessing(
         params=params,
         apply_softmax=True,
-        need_features=params['need_features'],
+        need_features=need_features,
         image_df=image_df,
         image_paths=image_paths,
         batch_size=len(image_paths['id_code']),
@@ -132,7 +134,7 @@ def input_fn(image_location='', data_dir=''):
         workers=num_workers,
         crop_black=True)
 
-    return DataLoader(dataset, params['batch_size'],
+    return DataLoader(dataset, len(image_paths['id_code']),
                       pin_memory=True,
                       num_workers=num_workers)
 
