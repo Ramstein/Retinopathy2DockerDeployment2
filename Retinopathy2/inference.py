@@ -95,7 +95,7 @@ def model_fn(model_dir):
     params = checkpoint['checkpoint_data']['cmd_args']
 
     report_checkpoint(checkpoint)
-    model_name = 'seresnext50d_gap'
+    model_name = 'seresnext50d_gwap'
 
     if model_name is None:
         model_name = params['model']

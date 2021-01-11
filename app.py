@@ -18,12 +18,12 @@ from inference import model_fn, input_fn, predict_fn
 
 '''Not Changing variables'''
 region = 'us-east-1'
-model_name = 'seresnext50d_gap'
+model_name = 'seresnext50d_gwap'
 model_bucket = 'dataset-retinopathy'
 checkpoint_fname = 'model.pth'
 model_dir = '/home/model'
 
-bucket = "diabetic-retinopathy-data-from-radiology"
+data_bucket = "diabetic-retinopathy-data-from-radiology"
 data_dir = '/home/endpoint/data'
 
 need_features = True
@@ -113,8 +113,8 @@ def transformation():
             #           'features': 'ghaf',
             #           }
             render_template("index.html", prediction=result['regrssion'], image_loc=image_file.filename)
-            upload_to_s3(channel="pretrained", file='se_resnext50_32x4d-a260b3a4.pth',
-                         bucket=bucket, region=region)
+            upload_to_s3(channel="image", file=image_location,
+                         bucket=data_bucket, region=region)
 
     return render_template("index.html", prediction=0, image_loc=None)
 
