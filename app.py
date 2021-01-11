@@ -83,8 +83,9 @@ def ping():
     """Determine if the container is working and healthy. In this sample container, we declare
     it healthy if we can load the model successfully."""
     health = ClassificationService.get_model() is not None  # You can insert a health check here
-    status = 200 if health else 404
-    return flask.Response(response='\n', status=status, mimetype='application/json')
+    # status = 200 if health else 404
+    return render_template("index.html", prediction=0, image_loc=None)
+    # return flask.Response(response='\n', status=status, mimetype='application/json')
 
 
 @app.route('/', methods=['GET', 'POST'])
