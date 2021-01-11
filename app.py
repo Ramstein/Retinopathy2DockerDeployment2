@@ -142,14 +142,16 @@ def transformation():
             logits = ""
             for l in result['logits'][0]:
                 logits = logits + ", " + str(round(l, 6))
+            if result['features']:
+                result['features'] = round(result['features'][0][0], 6)
             render_template("index.html", image_loc=image_file.filename,
-                            image_id=result['image_id'],
+                            image_id=result['image_id'][0],
                             scale=0,
                             severity='No DR',
                             logits=logits,
                             regression=round(result['regression'][0], 6),
                             ordinal=round(result['ordinal'][0], 6),
-                            features=round(result['features'], 6))
+                            features=result['features'])
             upload_to_s3(channel="image", filepath=image_location,
                          bucket=data_bucket, region=region)
     return render_template("index.html", image_loc=None,
