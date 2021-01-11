@@ -386,6 +386,6 @@ def cls_predictions_to_submission(predictions) -> pd.DataFrame:
 def reg_predictions_to_submission(predictions, rounding_coefficients=None) -> pd.DataFrame:
     rounder = partial(regression_to_class, rounding_coefficients=rounding_coefficients)
     predictions = predictions.copy()
-    predictions['diagnosis'] = rounder(predictions['diagnosis'].values)
+    predictions['diagnosis'] = rounder(float(predictions['diagnosis'].values))
     predictions['diagnosis'] = predictions['diagnosis'].apply(int)
     return predictions

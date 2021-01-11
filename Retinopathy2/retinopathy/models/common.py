@@ -17,7 +17,6 @@ def regression_to_class(value: torch.Tensor, min=0, max=4, rounding_coefficients
         value = torch.from_numpy(value)
     if isinstance(value, (int, float)):
         value = torch.tensor(value)
-
     if rounding_coefficients is None:
         value = torch.round(value)
         value = torch.clamp(value, min, max)

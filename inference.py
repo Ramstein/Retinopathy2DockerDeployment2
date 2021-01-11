@@ -151,8 +151,6 @@ def predict_fn(model, need_features=False, img_loc='', data_dir=''):
     predictions = DataFrame.from_dict(predictions)
 
     predictions['diagnosis'] = predictions['diagnosis'].apply(lambda x: float(x))
-    predictions['diagnosis'] = predictions['diagnosis'].apply(regression_to_class).apply(int)
-    print(predictions)
 
     diagnosis = reg_predictions_to_submission(predictions)['diagnosis'].values
     score = cohen_kappa_score(diagnosis, dataset.targets, weights='quadratic')
@@ -164,6 +162,9 @@ def predict_fn(model, need_features=False, img_loc='', data_dir=''):
     cdf_score = cohen_kappa_score(cdf_diagnosis, dataset.targets, weights='quadratic')
     predictions['cdf_score'] = cdf_score
     print('cdf_score:', cdf_score)
+
+    predictions['diagnosis'] = predictions['diagnosis'].apply(regression_to_class).apply(int)
+    print(predictions)
 
     predictions['logits'] = predictions['logits'].softmax(dim=1)
 
