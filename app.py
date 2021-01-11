@@ -141,15 +141,15 @@ def transformation():
             print("rendering index.html with predictions and image file, predictions=", result)
             logits = ""
             for l in result['logits'][0]:
-                logits = logits + ", " + l
+                logits = logits + ", " + str(round(l, 6))
             render_template("index.html", image_loc=image_file.filename,
                             image_id=result['image_id'],
                             scale=0,
                             severity='No DR',
                             logits=logits,
-                            regression=result['regression'][0],
-                            ordinal=result['ordinal'][0],
-                            features=result['features'])
+                            regression=round(result['regression'][0], 6),
+                            ordinal=round(result['ordinal'][0], 6),
+                            features=round(result['features'], 6))
             upload_to_s3(channel="image", filepath=image_location,
                          bucket=data_bucket, region=region)
     return render_template("index.html", image_loc=None,
