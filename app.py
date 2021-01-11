@@ -92,9 +92,11 @@ def ping():
     # status = 200 if health else 404
     return render_template("index.html", prediction=0, image_loc=None)
     # return flask.Response(response='\n', status=status, mimetype='application/json')
+@app.route('/')
+def home():
+    return render_template("index.html", prediction=0, image_loc=None)
 
-
-@app.route('/invocations', methods=['GET', 'POST'])
+@app.route('/predict', methods=['GET', 'POST'])
 def transformation():
     """Do an inference on a single batch of data. In this sample server, we take data as CSV, convert
     it to a pandas data frame for internal use and then convert the predictions back to CSV (which really
@@ -141,6 +143,5 @@ if __name__ == "__main__":
     health = ClassificationService.get_model() is not None  # You can insert a health check here
     status = 200 if health else 404
     print("status:", status)
-    app.run(host="0.0.0.0", port=8080, debug=True)
-
-    # return flask.Response(response='\n', status=status, mimetype='application/json')
+    # app.run(host="0.0.0.0", port=8080, debug=True) # for running on instances
+    app.run(debug=True)
