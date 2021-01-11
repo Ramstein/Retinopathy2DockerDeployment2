@@ -146,5 +146,5 @@ if __name__ == "__main__":
     health = ClassificationService.get_model() is not None  # You can insert a health check here
     status = 200 if health else 404
     print("status:", status)
-    app.run(host="0.0.0.0", port=8080, debug=True)  # for running on instances
+    app.run(host="0.0.0.0", port=8888, debug=True)  # for running on instances
     # app.run(debug=True)
