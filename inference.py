@@ -70,9 +70,11 @@ def model_fn(model_dir, model_name=None, checkpoint_fname='', apply_softmax=True
     params = checkpoint['checkpoint_data']['cmd_args']
 
     if model_name is None:
-        print("Quitting, specify the model_name.")
-        # model_name = params['model']
-        return
+        try:
+            model_name = params['model']
+        except:
+            print("Quitting, specify the model_name.")
+            return
 
     coarse_grading = params.get('coarse', False)
 

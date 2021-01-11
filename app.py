@@ -128,7 +128,7 @@ def transformation():
             image_file.save(image_location)
             # write the request body to test file
             model = ClassificationService.get_model()
-            print("Making predictions on image file.")
+            print("Making predictions on image file.", image_location)
             result = ClassificationService.InputPredictOutput(image_location, model=model)
             # result = {'image_id': "/home/endpoint/data/test.png",  #   # result is a dict
             #           'logits': 65651,

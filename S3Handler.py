@@ -1,7 +1,6 @@
 import logging
 import os
 from asyncio.log import logger
-from os import path
 
 import boto3
 import botocore
