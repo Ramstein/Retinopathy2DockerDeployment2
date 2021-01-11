@@ -94,7 +94,7 @@ def ping():
     # return flask.Response(response='\n', status=status, mimetype='application/json')
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/invocations', methods=['GET', 'POST'])
 def transformation():
     """Do an inference on a single batch of data. In this sample server, we take data as CSV, convert
     it to a pandas data frame for internal use and then convert the predictions back to CSV (which really
