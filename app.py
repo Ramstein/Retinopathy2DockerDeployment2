@@ -10,6 +10,7 @@ import os
 from os import path, makedirs
 
 import flask
+import werkzeug
 from flask import render_template
 from flask import request
 
@@ -76,6 +77,11 @@ class ClassificationService(object):
 
 # The flask app for serving predictions
 app = flask.Flask(__name__)
+
+
+@app.errorhandler(werkzeug.exceptions.BadRequest)
+def handle_bad_request(e):
+    return 'bad request!', 400
 
 
 @app.route('/ping', methods=['GET'])
