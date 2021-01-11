@@ -62,7 +62,7 @@ pretrained_settings_dilated = {
     },
     'se_resnext50_32x4d': {
         'imagenet': {
-            'url': 'https://dataset-retinopathy.s3.amazonaws.com/pretrained/seresnext50d_gwap_1024_medium_aptos2019_aptos2015_fold0_confident_rosalind.pth',
+            'url': 'https://dataset-retinopathy.s3.amazonaws.com/old/seresnext50d_gwap_1024_medium_aptos2019_aptos2015_fold0_confident_rosalind.pth',
             'input_space': 'RGB',
             'input_size': [3, 224, 224],
             'input_range': [0, 1],
