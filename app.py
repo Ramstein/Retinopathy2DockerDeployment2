@@ -17,7 +17,7 @@ from flask import render_template
 from flask import request
 
 from S3Handler import upload_to_s3, download_from_s3
-from inference import model_fn, input_fn, predict_fn
+from inference import model_fn, predict_fn
 
 '''Not Changing variables'''
 region = 'us-east-1'
@@ -46,18 +46,6 @@ class ClassificationService(object):
         """Get the json data from flask.request."""
         if request.content_type == 'application/json':
             return True
-            # if cls.json_data['request_type'] == 'inference':
-            #     token_key = cls.json_data['token_key']
-            #     # verify the token, is this person our user or not
-            # else:
-            #     pass
-            #
-            # try:
-            #     img0 = cls.json_data['img0']
-            #     if not img0:
-            #         raise BadRequest()
-            # except BadRequest:
-            #     raise NoAuthorizationError(f'Missing img0 key in json data.')
         else:
             return False
 
@@ -70,12 +58,10 @@ class ClassificationService(object):
         return cls.model
 
     @classmethod
-    def InputPredictOutput(cls, image_location, model):
+    def InputPredictOutput(cls, img_loc, model):
         """For the input, do the predictions and return them.
         Args:"""
-        input_object = input_fn(image_location, data_dir=data_dir, need_features=need_features)
-        return predict_fn(input_object=input_object, model=model, need_features=need_features)
-        # return output_fn(prediction=prediction)
+        return predict_fn(model=model, need_features=need_features, img_loc=img_loc, data_dir=data_dir, )
 
 
 # The flask app for serving predictions
@@ -107,8 +93,7 @@ def home():
                            severity="No DR",
                            logits=0,
                            regression=0,
-                           ordinal=0,
-                           features="None")
+                           ordinal=0)
 
 
 @app.route('/', methods=['POST'])
@@ -132,34 +117,31 @@ def transformation(t11=t1):
     if request.method == "POST":
         image_file = request.files["image"]
         if image_file:
-            image_location = os.path.join(data_dir, image_file.filename)
+            img_loc = os.path.join(data_dir, image_file.filename)
             print('Saving image file')
-            image_file.save(image_location)
-            # write the request body to test file
+            image_file.save(img_loc)
             model = ClassificationService.get_model()
-            print("Making predictions on image file.", image_location)
-            result = ClassificationService.InputPredictOutput(image_location, model=model)
-            # result = {'image_id': "/home/endpoint/data/test.png",  #   # result is a dict
+            print("Making predictions on image file.", img_loc)
+            predictions = ClassificationService.InputPredictOutput(img_loc, model=model)
+            # predictions = {'image_id': "/home/endpoint/data/test.png",  #   # predictions is a dict
             #           'logits': 65651,
             #           'regression': 4545,
             #           'ordinal': 98,
             #           'features': 'ghaf',
             #           }
-            print("rendering index.html with predictions and image file, predictions=", result)
+            print("rendering index.html with predictions and image file, predictions=", predictions)
             logits = ""
-            for l in result['logits'][0]:
+            for l in predictions['logits'][0]:
                 logits = logits + ", " + str(round(l, 6))
-            if result['features']:
-                result['features'] = round(result['features'][0][0], 6)
+
             render_template("index.html", image_loc=image_file.filename,
-                            image_id=result['image_id'][0],
+                            image_id=predictions['image_id'][0],
                             scale=0,
                             severity='No DR',
                             logits=logits,
-                            regression=round(result['regression'][0], 6),
-                            ordinal=round(result['ordinal'][0], 6),
-                            features=result['features'])
-            upload_to_s3(channel="image", filepath=image_location,
+                            regression=round(predictions['regression'][0], 6),
+                            ordinal=round(predictions['ordinal'][0], 6))
+            upload_to_s3(channel="image", filepath=img_loc,
                          bucket=data_bucket, region=region)
     return render_template("index.html", image_loc=None,
                            image_id="static/img/10011_right_820x615.png".split('/')[-1],
@@ -167,8 +149,7 @@ def transformation(t11=t1):
                            severity="No DR",
                            logits=0,
                            regression=0,
-                           ordinal=0,
-                           features="None")
+                           ordinal=0)
 
 
 if __name__ == "__main__":
