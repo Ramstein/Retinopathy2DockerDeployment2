@@ -28,7 +28,7 @@ model_dir = '/home/model'
 data_bucket = "diabetic-retinopathy-data-from-radiology"
 data_dir = '/home/endpoint/data'
 
-need_features = True
+need_features = False
 tta = None
 apply_softmax = True
 
@@ -89,6 +89,8 @@ def handle_bad_request(e):
 def ping():
     """Determine if the container is working and healthy. In this sample container, we declare
     it healthy if we can load the model successfully."""
+    print(f'Found a {request.method} request for prediction. form ping()')
+
     health = ClassificationService.get_model() is not None  # You can insert a health check here
     # status = 200 if health else 404
     return render_template("index.html", prediction=0, image_loc=None)
@@ -137,15 +139,18 @@ def transformation():
             #           'features': 'ghaf',
             #           }
             print("rendering index.html with predictions and image file, predictions=", result)
+            logits = ""
+            for l in result['logits'][0]:
+                logits = logits + ", " + l
             render_template("index.html", image_loc=image_file.filename,
-                            image_id=str(result['image_id']).split('/')[-1],
+                            image_id=result['image_id'],
                             scale=0,
                             severity='No DR',
-                            logits=result['logits'],
-                            regression=result['regression'],
-                            ordinal=result['ordinal'],
+                            logits=logits,
+                            regression=result['regression'][0],
+                            ordinal=result['ordinal'][0],
                             features=result['features'])
-            upload_to_s3(channel="image", file=image_location,
+            upload_to_s3(channel="image", filepath=image_location,
                          bucket=data_bucket, region=region)
     return render_template("index.html", image_loc=None,
                            image_id="static/img/10011_right_820x615.png".split('/')[-1],

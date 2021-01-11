@@ -159,6 +159,8 @@ def predict_fn(input_object, model, need_features):
         predictions['ordinal'].extend(to_numpy(outputs['ordinal']).tolist())
         if need_features:
             predictions['features'].extend(to_numpy(outputs['features']).tolist())
+        else:
+            predictions['features'] = None
 
     del input_object
     return predictions

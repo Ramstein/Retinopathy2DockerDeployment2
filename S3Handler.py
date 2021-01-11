@@ -9,11 +9,11 @@ from botocore.exceptions import ClientError
 from tqdm import tqdm
 
 
-def upload_to_s3(channel, file, bucket, region=''):
+def upload_to_s3(channel, filepath, bucket, region=''):
     s3 = boto3.resource('s3', region_name=region)
-    data = open(file, "rb")
-    key = channel + '/' + file
-    print("Uploading file {} to s3://{}/{}".format(file, bucket, channel))
+    data = open(filepath, "rb")
+    key = channel + '/' + str(filepath).split('/')[-1]
+    print("Uploading file {} to s3://{}/{}".format(filepath, bucket, channel))
     s3.Bucket(bucket).put_object(Key=key, Body=data)
 
 
