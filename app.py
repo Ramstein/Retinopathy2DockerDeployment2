@@ -7,6 +7,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import os
+from collections import defaultdict
 from os import path, makedirs
 
 import flask
@@ -96,7 +97,14 @@ def ping():
 
 @app.route('/')
 def home():
-    return render_template("index.html", prediction=0, image_loc=None)
+    return render_template("index.html", image_loc=None,
+                           image_id="static/img/10011_right_820x615.png".split('/')[-1],
+                           scale=0,
+                           severity="No DR",
+                           logits=0,
+                           regression=0,
+                           ordinal=0,
+                           features="None")
 
 
 @app.route('/predict', methods=['GET', 'POST'])
@@ -124,11 +132,26 @@ def transformation():
             #           'ordinal': 98,
             #           'features': 'ghaf',
             #           }
-            render_template("index.html", prediction=result['regrssion'], image_loc=image_file.filename)
+            result = defaultdict(list)
+            render_template("index.html", image_loc=image_file.filename,
+                            image_id=str(result['image_id']).split('/')[-1],
+                            scale=0,
+                            severity='No DR',
+                            logits=result['logits'],
+                            regression=result['regression'],
+                            ordinal=result['ordinal'],
+                            features=result['features'])
             upload_to_s3(channel="image", file=image_location,
                          bucket=data_bucket, region=region)
 
-    return render_template("index.html", prediction=0, image_loc=None)
+    return render_template("index.html", image_loc=None,
+                           image_id="static/img/10011_right_820x615.png".split('/')[-1],
+                           scale=0,
+                           severity="No DR",
+                           logits=0,
+                           regression=0,
+                           ordinal=0,
+                           features="None")
 
 
 if __name__ == "__main__":
