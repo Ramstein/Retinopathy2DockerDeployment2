@@ -70,7 +70,7 @@ class ClassificationService(object):
     def InputPredictOutput(cls, img_loc, model):
         """For the input, do the predictions and return them.
         Args:"""
-        return predict_fn(model=model, need_features=need_features, img_loc=img_loc, data_dir=data_dir, )
+        return predict_fn(model=model, need_features=need_features, img_loc=img_loc, data_dir=data_dir)
 
 
 # The flask app for serving predictions

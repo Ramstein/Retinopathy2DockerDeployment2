@@ -149,6 +149,7 @@ def predict_fn(model, need_features=False, img_loc='', data_dir=''):
             predictions['features'].extend(to_numpy(outputs['features']).tolist())
         predictions = DataFrame.from_dict(predictions)
 
+    predictions['diagnosis'] = predictions['diagnosis'].apply(lambda x: float(x))
     predictions['diagnosis'] = predictions['diagnosis'].apply(regression_to_class).apply(int)
     predictions['logits'] = predictions['logits'].apply(lambda x: x.softmax(dim=1))
 
