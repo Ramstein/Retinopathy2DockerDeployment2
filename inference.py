@@ -154,13 +154,12 @@ def predict_fn(model, need_features=False, img_loc='', data_dir=''):
     predictions['diagnosis'] = predictions['diagnosis'].apply(regression_to_class).apply(int)
     print(predictions)
 
-    cdf = compute_cdf(dataset.targets)
-
     diagnosis = reg_predictions_to_submission(predictions)['diagnosis'].values
     score = cohen_kappa_score(diagnosis, dataset.targets, weights='quadratic')
     predictions['score'] = score
     print('score:', score)
 
+    cdf = compute_cdf(dataset.targets)
     cdf_diagnosis = reg_cdf_predictions_to_submission(predictions, cdf)['diagnosis'].values
     cdf_score = cohen_kappa_score(cdf_diagnosis, dataset.targets, weights='quadratic')
     predictions['cdf_score'] = cdf_score
