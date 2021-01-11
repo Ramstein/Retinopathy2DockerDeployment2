@@ -147,11 +147,12 @@ def predict_fn(model, need_features=False, img_loc='', data_dir=''):
         predictions['ordinal'].extend(to_numpy(outputs['ordinal']).tolist())
         if need_features:
             predictions['features'].extend(to_numpy(outputs['features']).tolist())
-        predictions = DataFrame.from_dict(predictions)
+
+    predictions = DataFrame.from_dict(predictions)
 
     predictions['diagnosis'] = predictions['diagnosis'].apply(lambda x: float(x))
     predictions['diagnosis'] = predictions['diagnosis'].apply(regression_to_class).apply(int)
-    predictions['logits'] = predictions['logits'].apply(lambda x: x.softmax(dim=1))
+    print(predictions)
 
     cdf = compute_cdf(dataset.targets)
 
@@ -164,6 +165,8 @@ def predict_fn(model, need_features=False, img_loc='', data_dir=''):
     cdf_score = cohen_kappa_score(cdf_diagnosis, dataset.targets, weights='quadratic')
     predictions['cdf_score'] = cdf_score
     print('cdf_score:', cdf_score)
+
+    predictions['logits'] = predictions['logits'].softmax(dim=1)
 
     del dataset, data_loader
     return predictions
