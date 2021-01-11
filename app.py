@@ -7,7 +7,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import os
-from collections import defaultdict
 from os import path, makedirs
 
 import flask
@@ -125,14 +124,13 @@ def transformation():
             image_file.save(image_location)
             # write the request body to test file
             model = ClassificationService.get_model()
-            result = ClassificationService.InputPredictOutput(image_location, model=model)  # result is a dict
-            # result = {'image_id': "/home/endpoint/data/test.png",
+            result = ClassificationService.InputPredictOutput(image_location, model=model)
+            # result = {'image_id': "/home/endpoint/data/test.png",  #   # result is a dict
             #           'logits': 65651,
             #           'regression': 4545,
             #           'ordinal': 98,
             #           'features': 'ghaf',
             #           }
-            result = defaultdict(list)
             render_template("index.html", image_loc=image_file.filename,
                             image_id=str(result['image_id']).split('/')[-1],
                             scale=0,
