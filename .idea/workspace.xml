@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8d23ca38-8474-4c7d-ab8a-0856af7c4941" name="Default Changelist" comment="code changes made by Ramstein">
-      <change afterPath="$PROJECT_DIR$/Retinopathy2/PredictionOutput.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
@@ -111,20 +110,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1609962801216</updated>
-    </task>
-    <task id="LOCAL-00007" summary="code changes made by Ramstein">
-      <created>1610110159451</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1610110159451</updated>
-    </task>
-    <task id="LOCAL-00008" summary="code changes made by Ramstein">
-      <created>1610122974929</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1610122974929</updated>
     </task>
     <task id="LOCAL-00009" summary="code changes made by Ramstein">
       <created>1610123144951</created>
@@ -455,7 +440,21 @@
       <option name="project" value="LOCAL" />
       <updated>1610378555060</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="code changes made by Ramstein">
+      <created>1610379546138</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1610379546138</updated>
+    </task>
+    <task id="LOCAL-00057" summary="code changes made by Ramstein">
+      <created>1610379621922</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1610379621922</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -490,7 +489,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>176</line>
+          <line>186</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

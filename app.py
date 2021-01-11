@@ -8,6 +8,7 @@ from __future__ import print_function
 
 import os
 from os import path, makedirs
+from time import time
 
 import flask
 import requests
@@ -31,6 +32,7 @@ data_dir = '/home/endpoint/data'
 need_features = False
 tta = None
 apply_softmax = True
+global t1, t2
 
 
 # A singleton for holding the model. This simply loads the model and holds it.
@@ -110,15 +112,20 @@ def home():
 
 
 @app.route('/', methods=['POST'])
-def transformation():
+def transformation(t11=t1):
     """Do an inference on a single batch of data. In this sample server, we take data as CSV, convert
     it to a pandas data frame for internal use and then convert the predictions back to CSV (which really
     just means one prediction per line, since there's a single column.
     """
-    # print("cleaning test dir")
-    # for root, dirs, files in os.walk(data_dir):
-    #     for f in files:
-    #         os.unlink(os.path.join(root, f))
+    # directory cleaner scheduled on 30 minute
+    t2 = time()
+    dt = (t2 - t11) / 1800
+    if dt > 1:
+        print(f", it's been {round(dt, 2) * 2} hours, so cleaning {data_dir} dir")
+        t1 = t2 = time()
+        for root, dirs, files in os.walk(data_dir):
+            for f in files:
+                os.unlink(os.path.join(root, f))
 
     print(f'Found a {request.method} request for prediction.')
 
@@ -166,6 +173,9 @@ def transformation():
 
 if __name__ == "__main__":
     print("Initialising app, checking directories and model files.")
+    # directory cleaner scheduled on 30 minute
+    t1 = t2 = time()
+
     if not path.exists(data_dir):
         makedirs(data_dir, exist_ok=True)
 
